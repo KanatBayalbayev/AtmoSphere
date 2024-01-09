@@ -1,10 +1,10 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Location(
+data class LocationDTO(
     @SerializedName("name")
     @Expose
     val name: String,

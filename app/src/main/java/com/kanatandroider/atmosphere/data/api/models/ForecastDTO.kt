@@ -1,11 +1,11 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Forecast(
+data class ForecastDTO(
     @SerializedName("forecastday")
     @Expose
-    val forecastday: List<Forecastday>
+    val forecastday: List<ForecastdayDTO>
 )

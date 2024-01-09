@@ -1,13 +1,15 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Hour(
+data class HourDTO(
     @SerializedName("time_epoch")
     @Expose
     val timeEpoch: Int,
+    @PrimaryKey
     @SerializedName("time")
     @Expose
     val time: String,
@@ -22,7 +24,7 @@ data class Hour(
     val isDay: Int,
     @SerializedName("condition")
     @Expose
-    val condition: Condition,
+    val condition: ConditionDTO,
     @SerializedName("wind_mph")
     @Expose
     val windMph: Double,

@@ -1,10 +1,10 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Current(
+data class CurrentDTO(
     @SerializedName("last_updated_epoch")
     @Expose
     val lastUpdatedEpoch: Int,
@@ -22,7 +22,7 @@ data class Current(
     val isDay: Int,
     @SerializedName("condition")
     @Expose
-    val condition: Condition,
+    val condition: ConditionDTO,
     @SerializedName("wind_mph")
     @Expose
     val windMph: Double,

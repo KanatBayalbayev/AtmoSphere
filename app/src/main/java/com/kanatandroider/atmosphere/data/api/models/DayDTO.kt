@@ -1,10 +1,10 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Day(
+data class DayDTO(
     @SerializedName("maxtemp_c")
     @Expose
     val maxtempC: Double,
@@ -61,7 +61,7 @@ data class Day(
     val dailyChanceOfSnow: Int,
     @SerializedName("condition")
     @Expose
-    val condition: Condition,
+    val condition: ConditionDTO,
     @SerializedName("uv")
     @Expose
     val uv: Double

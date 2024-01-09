@@ -1,10 +1,10 @@
-package com.kanatandroider.atmosphere.domain.models
+package com.kanatandroider.atmosphere.data.api.models
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class Forecastday(
+data class ForecastdayDTO(
     @SerializedName("date")
     @Expose
     val date: String,
@@ -13,11 +13,11 @@ data class Forecastday(
     val dateEpoch: Int,
     @SerializedName("day")
     @Expose
-    val day: Day,
+    val day: DayDTO,
     @SerializedName("astro")
     @Expose
-    val astro: Astro,
+    val astro: AstroDTO,
     @SerializedName("hour")
     @Expose
-    val hour: List<Hour>
+    val hour: List<HourDTO>
 )

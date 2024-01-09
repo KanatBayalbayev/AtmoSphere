@@ -1,23 +1,21 @@
-package com.kanatandroider.atmosphere
+package com.kanatandroider.atmosphere.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.kanatandroider.atmosphere.R
+import com.kanatandroider.atmosphere.data.api.network.ApiFactory
+import com.kanatandroider.atmosphere.data.api.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,25 +31,21 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
 
-
-
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://api.weatherapi.com/v1/")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-         service = retrofit.create(ApiService::class.java)
         val lon = sharedPreferencesManager.getString("lon", "")
         val lat = sharedPreferencesManager.getString("lat", "")
+
+        service = ApiFactory.apiService
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val data = service.getData(city = "$lat,$lon")
+            Log.d("MainActivityTestMaker", data.toString())
+
+        }
+
+
+
+
+
 
 
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -126,10 +120,10 @@ class MainActivity : AppCompatActivity() {
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location : Location? ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    val data = service.getData(city = "$location?.latitude,$location?.longitude")
-                    Log.d("DataForWork", data.toString())
-                }
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    val data = service.getData(city = "$location?.latitude,$location?.longitude")
+//                    Log.d("DataForWork", data.toString())
+//                }
                 sharedPreferencesManager.saveString("lat", location?.latitude.toString())
                 sharedPreferencesManager.saveString("lon", location?.longitude.toString())
 
