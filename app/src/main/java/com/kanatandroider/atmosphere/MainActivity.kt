@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://api.openweathermap.org/data/2.5/")
+            .baseUrl("http://api.weatherapi.com/v1/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("DataForWork", data.toString())
 //        }
 
+        Log.d("DataForWork", "$lat")
         Log.d("DataForWork", "$lon")
 
         if (checkLocationPermission()) {
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location : Location? ->
                 CoroutineScope(Dispatchers.IO).launch {
-                    val data = service.getData(location?.latitude.toString(), location?.longitude.toString())
+                    val data = service.getData(city = "$location?.latitude,$location?.longitude")
                     Log.d("DataForWork", data.toString())
                 }
                 sharedPreferencesManager.saveString("lat", location?.latitude.toString())
