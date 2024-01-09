@@ -1,5 +1,9 @@
 package com.kanatandroider.atmosphere.domain
 
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 data class CurrentWeatherEntity(
     val name: String,
     val lastUpdated: String,

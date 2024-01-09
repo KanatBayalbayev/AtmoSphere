@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("TestCleanArchAndDagger", it.toString())
         }
-        apiService = ApiFactory.apiService
+//        apiService = ApiFactory.apiService
 
 
 
@@ -60,10 +60,10 @@ class MainActivity : AppCompatActivity() {
 
 //        service = ApiFactory.apiService
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val data = apiService.getData(city = "Almaty")
-            Log.d("MainActivityTestMaker", data.toString())
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val data = apiService.getData(city = "Almaty")
+//            Log.d("MainActivityTestMaker", data.toString())
+//        }
 
 
 //        CoroutineScope(Dispatchers.IO).launch {

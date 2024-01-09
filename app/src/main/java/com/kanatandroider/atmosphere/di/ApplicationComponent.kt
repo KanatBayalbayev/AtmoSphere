@@ -2,6 +2,7 @@ package com.kanatandroider.atmosphere.di
 
 import android.app.Application
 import com.kanatandroider.atmosphere.presentation.MainActivity
+import com.kanatandroider.atmosphere.presentation.MyApplication
 import dagger.BindsInstance
 import dagger.Component
 
@@ -10,6 +11,8 @@ import dagger.Component
 interface ApplicationComponent {
 
     fun inject(mainActivity: MainActivity)
+
+    fun inject(myApplication: MyApplication)
 
 
     @Component.Factory
