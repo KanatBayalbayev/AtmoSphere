@@ -5,8 +5,9 @@ import com.kanatandroider.atmosphere.data.api.models.HourDTO
 import com.kanatandroider.atmosphere.data.api.models.WeatherDataDTO
 import com.kanatandroider.atmosphere.data.database.CurrentWeatherDatabase
 import com.kanatandroider.atmosphere.domain.CurrentWeatherEntity
+import javax.inject.Inject
 
-class WeatherMapper {
+class WeatherMapper @Inject constructor() {
 
 
     fun mapWeatherDTOToDatabase(

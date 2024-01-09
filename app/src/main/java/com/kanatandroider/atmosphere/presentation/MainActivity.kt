@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kanatandroider.atmosphere.R
@@ -16,6 +17,7 @@ import com.kanatandroider.atmosphere.data.api.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,9 +25,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     private var longitude: String = ""
     private var latitude: String = ""
-    private lateinit var service: ApiService
+
+    private lateinit var apiService: ApiService
+
+    private lateinit var mainViewModel: MainViewModel
+
+    @Inject
+    lateinit var mainViewModelFactory: MainViewModelFactory
+
+    private val component by lazy {
+        (application as MyApplication).component
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -34,18 +47,23 @@ class MainActivity : AppCompatActivity() {
         val lon = sharedPreferencesManager.getString("lon", "")
         val lat = sharedPreferencesManager.getString("lat", "")
 
-        service = ApiFactory.apiService
+        mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
+        mainViewModel.currentWeatherData.observe(this){
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val data = service.getData(city = "$lat,$lon")
-            Log.d("MainActivityTestMaker", data.toString())
-
+            Log.d("TestCleanArchAndDagger", it.toString())
         }
+//        apiService = ApiFactory.apiService
 
 
 
 
 
+//        service = ApiFactory.apiService
+
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val data = apiService.getData(city = "Almaty")
+//            Log.d("MainActivityTestMaker", data.toString())
+//        }
 
 
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -73,7 +91,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -84,7 +101,8 @@ class MainActivity : AppCompatActivity() {
             REQUEST_LOCATION_PERMISSION -> {
                 if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
                     getCurrentLocation()
                 } else {
                     // Разрешение было отклонено. Вы можете показать объяснение, если считаете это необходимым
@@ -119,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
+            .addOnSuccessListener { location: Location? ->
 //                CoroutineScope(Dispatchers.IO).launch {
 //                    val data = service.getData(city = "$location?.latitude,$location?.longitude")
 //                    Log.d("DataForWork", data.toString())
