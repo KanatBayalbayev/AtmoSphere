@@ -7,6 +7,7 @@ interface WeatherRepository {
 
     fun getCurrentWeatherList(): LiveData<List<CurrentWeatherEntity>>
 
+    fun loadData()
 
 
 }
