@@ -1,16 +1,13 @@
 package com.kanatandroider.atmosphere.presentation
 
 import android.app.Application
-import android.content.res.Configuration
-import com.kanatandroider.atmosphere.data.workmanager.UpdateDataFactory
 import com.kanatandroider.atmosphere.di.DaggerApplicationComponent
-import javax.inject.Inject
 
-class MyApplication : Application(), androidx.work.Configuration.Provider {
+class MyApplication : Application() {
 
 
-    @Inject
-    lateinit var workerFactory: UpdateDataFactory
+//    @Inject
+//    lateinit var workerFactory: UpdateDataFactory
 
 
     val component by lazy {
@@ -21,8 +18,8 @@ class MyApplication : Application(), androidx.work.Configuration.Provider {
         component.inject(this)
         super.onCreate()
     }
-    override val workManagerConfiguration: androidx.work.Configuration
-         get() = androidx.work.Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
+//    override val workManagerConfiguration: androidx.work.Configuration
+//         get() = androidx.work.Configuration.Builder()
+//            .setWorkerFactory(workerFactory)
+//            .build()
 }

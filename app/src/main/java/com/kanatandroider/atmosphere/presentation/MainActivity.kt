@@ -12,26 +12,27 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kanatandroider.atmosphere.R
+import com.kanatandroider.atmosphere.data.api.models.HourDTO
 import com.kanatandroider.atmosphere.data.api.network.ApiFactory
 import com.kanatandroider.atmosphere.data.api.network.ApiService
+import com.kanatandroider.atmosphere.data.database.AppDatabase
+import com.kanatandroider.atmosphere.data.database.WeatherDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var mainViewModelFactory: MainViewModelFactory
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     private var longitude: String = ""
     private var latitude: String = ""
-
-    private lateinit var apiService: ApiService
-
     private lateinit var mainViewModel: MainViewModel
-
-    @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
 
     private val component by lazy {
         (application as MyApplication).component
@@ -43,51 +44,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
+        checkAndGetLocation()
 
         val lon = sharedPreferencesManager.getString("lon", "")
         val lat = sharedPreferencesManager.getString("lat", "")
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
-        mainViewModel.currentWeatherData.observe(this){
+//        mainViewModel.currentWeatherData.observe(this){
+//            Log.d("TestCleanArchAndDagger", it.toString())
+//        }
 
-            Log.d("TestCleanArchAndDagger", it.toString())
+        CoroutineScope(Dispatchers.IO).launch{
+            mainViewModel.loadData("Washington")
+            withContext(Dispatchers.Main){
+                mainViewModel.currentWeatherData("Washington").observe(this@MainActivity){
+                    Log.d("TestCleanArchAndDagger", it.toString())
+                }
+            }
         }
-//        apiService = ApiFactory.apiService
 
 
 
 
 
-//        service = ApiFactory.apiService
+    }
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val data = apiService.getData(city = "Almaty")
-//            Log.d("MainActivityTestMaker", data.toString())
-//        }
-
-
-//        CoroutineScope(Dispatchers.IO).launch {
-
-//            val data = lon?.let {
-//                if (lat != null) {
-//                    service.getData(lat, it)
-//                }
-//            }
-//            Log.d("DataForWork", data.toString())
-//        }
-
-        Log.d("DataForWork", "$lat")
-        Log.d("DataForWork", "$lon")
-
+    private fun checkAndGetLocation(){
         if (checkLocationPermission()) {
             getCurrentLocation()
         } else {
             requestLocationPermission()
         }
-
-        Log.d("LocationTestMaker", longitude)
-
-
     }
 
 
@@ -172,3 +159,4 @@ class MainActivity : AppCompatActivity() {
         const val REQUEST_LOCATION_PERMISSION = 1
     }
 }
+
