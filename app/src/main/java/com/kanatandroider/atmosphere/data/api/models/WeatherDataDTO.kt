@@ -1,6 +1,7 @@
 package com.kanatandroider.atmosphere.data.api.models
 
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
@@ -13,5 +14,5 @@ data class WeatherDataDTO(
     val current: CurrentDTO,
     @SerializedName("forecast")
     @Expose
-    val forecast: ForecastDTO
+    val forecast: ForecastDTO,
 )

@@ -14,7 +14,7 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    val currentWeatherData = getCurrentWeatherListUseCase
+    val currentWeatherData = getCurrentWeatherListUseCase()
 
     val loadData = loadDataUseCase
 

@@ -1,10 +1,9 @@
 package com.kanatandroider.atmosphere.data.mapper
 
-import com.kanatandroider.atmosphere.data.api.models.ForecastdayDTO
-import com.kanatandroider.atmosphere.data.api.models.HourDTO
 import com.kanatandroider.atmosphere.data.api.models.WeatherDataDTO
-import com.kanatandroider.atmosphere.data.database.CurrentWeatherDatabase
+import com.kanatandroider.atmosphere.data.database.CurrentDayWeather
 import com.kanatandroider.atmosphere.domain.CurrentWeatherEntity
+import com.kanatandroider.atmosphere.domain.models.ForcastDayEntity
 import javax.inject.Inject
 
 class WeatherMapper @Inject constructor() {
@@ -37,9 +36,11 @@ class WeatherMapper @Inject constructor() {
 
     fun mapWeatherDTOToDatabase(
         weatherDataDTO: WeatherDataDTO,
-    ): CurrentWeatherDatabase{
-        return CurrentWeatherDatabase(
+        daysList: String
+    ): CurrentDayWeather{
+        return CurrentDayWeather(
             name = weatherDataDTO.location.name,
+            localtime = weatherDataDTO.location.localtime,
             lastUpdated = weatherDataDTO.current.lastUpdated,
             currentTempC = weatherDataDTO.current.tempC,
             windKph = weatherDataDTO.current.windKph,
@@ -47,9 +48,11 @@ class WeatherMapper @Inject constructor() {
             feelsLikeC = weatherDataDTO.current.feelslikeC,
             description = weatherDataDTO.current.condition.text,
             codeOfDescription = weatherDataDTO.current.condition.code,
+            id = 1,
+            forecastday = daysList
+
         )
     }
-
 
 //    fun mapDatabaseToEntity(
 //        currentWeatherDatabase: CurrentWeatherDatabase
@@ -76,17 +79,21 @@ class WeatherMapper @Inject constructor() {
 //    }
 
     fun mapDatabaseToEntity(
-        currentWeatherDatabase: CurrentWeatherDatabase
+        currentDayWeather: CurrentDayWeather,
+        daysList: List<ForcastDayEntity>
     ): CurrentWeatherEntity{
         return CurrentWeatherEntity(
-            name = currentWeatherDatabase.name,
-            lastUpdated = currentWeatherDatabase.lastUpdated,
-            currentTempC = currentWeatherDatabase.currentTempC,
-            windKph = currentWeatherDatabase.windKph,
-            humidity = currentWeatherDatabase.humidity,
-            feelsLikeC = currentWeatherDatabase.feelsLikeC,
-            description = currentWeatherDatabase.description,
-            codeOfDescription = currentWeatherDatabase.codeOfDescription
+            name = currentDayWeather.name,
+            lastUpdated = currentDayWeather.lastUpdated,
+            currentTempC = currentDayWeather.currentTempC,
+            windKph = currentDayWeather.windKph,
+            humidity = currentDayWeather.humidity,
+            feelsLikeC = currentDayWeather.feelsLikeC,
+            description = currentDayWeather.description,
+            codeOfDescription = currentDayWeather.codeOfDescription,
+            days = daysList,
+
+
         )
     }
 

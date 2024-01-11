@@ -9,9 +9,9 @@ import androidx.room.Query
 @Dao
 interface WeatherDAO {
 
-    @Query("SELECT * FROM current_weather WHERE name == :city")
-    fun getCurrentWeather(city: String): LiveData<CurrentWeatherDatabase>
+    @Query("SELECT * FROM current_weather")
+    fun getCurrentWeather(): LiveData<CurrentDayWeather>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCurrentWeatherList(currentWeatherDatabase: CurrentWeatherDatabase)
+    suspend fun insertCurrentWeatherList(currentDayWeather: CurrentDayWeather)
 }

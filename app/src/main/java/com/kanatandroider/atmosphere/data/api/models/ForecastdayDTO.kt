@@ -8,9 +8,6 @@ data class ForecastdayDTO(
     @SerializedName("date")
     @Expose
     val date: String,
-    @SerializedName("date_epoch")
-    @Expose
-    val dateEpoch: Int,
     @SerializedName("day")
     @Expose
     val day: DayDTO,

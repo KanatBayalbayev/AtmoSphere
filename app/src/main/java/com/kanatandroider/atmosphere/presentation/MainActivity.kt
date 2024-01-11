@@ -55,17 +55,21 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         CoroutineScope(Dispatchers.IO).launch{
-            mainViewModel.loadData("Washington")
+            mainViewModel.loadData("Almaty")
             withContext(Dispatchers.Main){
-                mainViewModel.currentWeatherData("Washington").observe(this@MainActivity){
+                mainViewModel.currentWeatherData.observe(this@MainActivity){
                     Log.d("TestCleanArchAndDagger", it.toString())
+
+                    for (day in it.days){
+                        for (hour in day.hour){
+                            Log.d("TestCleanArchAndDaggerHours", hour.toString())
+                        }
+
+                    }
                 }
+
             }
         }
-
-
-
-
 
     }
 

@@ -8,9 +8,6 @@ data class ConditionDTO(
     @SerializedName("text")
     @Expose
     val text: String,
-    @SerializedName("icon")
-    @Expose
-    val icon: String,
     @SerializedName("code")
     @Expose
     val code: Int

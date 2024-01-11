@@ -5,7 +5,7 @@ import com.kanatandroider.atmosphere.domain.CurrentWeatherEntity
 
 interface WeatherRepository {
 
-    fun getCurrentWeatherList(city: String): LiveData<CurrentWeatherEntity>
+    fun getCurrentWeatherList(): LiveData<CurrentWeatherEntity>
 
 
     suspend fun loadData(city: String)

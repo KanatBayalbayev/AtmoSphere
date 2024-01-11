@@ -3,10 +3,13 @@ package com.kanatandroider.atmosphere.data.repositoryimpl
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kanatandroider.atmosphere.data.api.network.ApiService
 import com.kanatandroider.atmosphere.data.database.WeatherDAO
 import com.kanatandroider.atmosphere.data.mapper.WeatherMapper
 import com.kanatandroider.atmosphere.domain.CurrentWeatherEntity
+import com.kanatandroider.atmosphere.domain.models.ForcastDayEntity
 import com.kanatandroider.atmosphere.domain.repository.WeatherRepository
 import javax.inject.Inject
 
@@ -16,22 +19,35 @@ class WeatherRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : WeatherRepository {
 
-    override fun getCurrentWeatherList(city: String): LiveData<CurrentWeatherEntity> {
-        return weatherDAO.getCurrentWeather(city).map {
-            mapper.mapDatabaseToEntity(it)
+    override fun getCurrentWeatherList(): LiveData<CurrentWeatherEntity> {
+        return weatherDAO.getCurrentWeather().map {
+            val gson = Gson()
+            val listType = object : TypeToken<List<ForcastDayEntity>>() {}.type
+            val myObjectList: List<ForcastDayEntity> = gson.fromJson(it.forecastday, listType)
+            mapper.mapDatabaseToEntity(it, myObjectList)
         }
     }
 
     override suspend fun loadData(city: String) {
         val listData = apiService.getData(
-            cityInput = city,
+            cityInput = city
         )
         Log.d("DTOtestMaker", listData.toString())
-        val dbList = mapper.mapWeatherDTOToDatabase(listData)
-        Log.d("DBtestMaker", dbList.toString())
+        val gson = Gson()
+        val json = gson.toJson(listData.forecast.forecastday)
+        Log.d("JSONTESTMAKER", json.toString())
+
+        val dbList = mapper.mapWeatherDTOToDatabase(listData, json)
+
+
+
+
         weatherDAO.insertCurrentWeatherList(dbList)
-        val entityData = mapper.mapDatabaseToEntity(dbList)
-        Log.d("EntitytestMaker", entityData.toString())
+
+        val jsonDB: String = dbList.forecastday
+        val listType = object : TypeToken<List<ForcastDayEntity>>() {}.type
+        val myObjectList: List<ForcastDayEntity> = gson.fromJson(json, listType)
+        Log.d("CheckForWorkingTestMaker", myObjectList.toString())
     }
 //    override fun getCurrentWeatherList(): LiveData<CurrentWeatherEntity> {
 ////        return weatherDAO.getHourlyWeatherList().map {
