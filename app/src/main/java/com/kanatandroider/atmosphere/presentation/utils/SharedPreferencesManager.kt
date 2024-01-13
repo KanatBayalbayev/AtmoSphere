@@ -1,4 +1,4 @@
-package com.kanatandroider.atmosphere.presentation
+package com.kanatandroider.atmosphere.presentation.utils
 
 import android.content.Context
 import android.content.SharedPreferences

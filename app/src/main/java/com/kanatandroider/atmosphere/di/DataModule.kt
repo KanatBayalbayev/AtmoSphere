@@ -2,6 +2,7 @@ package com.kanatandroider.atmosphere.di
 
 import android.app.Application
 import com.google.android.gms.common.api.Api
+import com.google.gson.Gson
 import com.kanatandroider.atmosphere.data.api.network.ApiFactory
 import com.kanatandroider.atmosphere.data.api.network.ApiService
 import com.kanatandroider.atmosphere.data.database.AppDatabase
@@ -32,6 +33,11 @@ interface DataModule {
         @ApplicationScope
         fun provideApiService(): ApiService {
             return ApiFactory.apiService
+        }
+
+        @Provides
+        fun provideGson(): Gson {
+            return Gson()
         }
 
     }

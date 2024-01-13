@@ -1,8 +1,8 @@
 package com.kanatandroider.atmosphere.di
 
 import android.app.Application
-import com.kanatandroider.atmosphere.presentation.MainActivity
-import com.kanatandroider.atmosphere.presentation.MyApplication
+import com.kanatandroider.atmosphere.presentation.activities.MainActivity
+import com.kanatandroider.atmosphere.presentation.activities.MyApplication
 import dagger.BindsInstance
 import dagger.Component
 

@@ -1,4 +1,4 @@
-package com.kanatandroider.atmosphere.presentation
+package com.kanatandroider.atmosphere.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

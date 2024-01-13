@@ -10,23 +10,25 @@ import com.kanatandroider.atmosphere.data.database.WeatherDAO
 import com.kanatandroider.atmosphere.data.mapper.WeatherMapper
 import com.kanatandroider.atmosphere.domain.CurrentWeatherEntity
 import com.kanatandroider.atmosphere.domain.models.ForcastDayEntity
+import com.kanatandroider.atmosphere.domain.models.HourEntity
 import com.kanatandroider.atmosphere.domain.repository.WeatherRepository
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
     private val mapper: WeatherMapper,
     private val weatherDAO: WeatherDAO,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val gson: Gson
 ) : WeatherRepository {
 
-    override fun getCurrentWeatherList(): LiveData<CurrentWeatherEntity> {
+    override fun getCurrentWeather(): LiveData<CurrentWeatherEntity> {
         return weatherDAO.getCurrentWeather().map {
-            val gson = Gson()
             val listType = object : TypeToken<List<ForcastDayEntity>>() {}.type
             val myObjectList: List<ForcastDayEntity> = gson.fromJson(it.forecastday, listType)
             mapper.mapDatabaseToEntity(it, myObjectList)
         }
     }
+
 
     override suspend fun loadData(city: String) {
         val listData = apiService.getData(

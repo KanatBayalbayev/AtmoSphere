@@ -1,10 +1,11 @@
-package com.kanatandroider.atmosphere.presentation
+package com.kanatandroider.atmosphere.presentation.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -12,11 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kanatandroider.atmosphere.R
-import com.kanatandroider.atmosphere.data.api.models.HourDTO
-import com.kanatandroider.atmosphere.data.api.network.ApiFactory
-import com.kanatandroider.atmosphere.data.api.network.ApiService
-import com.kanatandroider.atmosphere.data.database.AppDatabase
-import com.kanatandroider.atmosphere.data.database.WeatherDAO
+import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModel
+import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModelFactory
+import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,41 +29,43 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
-    private var longitude: String = ""
-    private var latitude: String = ""
     private lateinit var mainViewModel: MainViewModel
 
     private val component by lazy {
         (application as MyApplication).component
     }
 
+    private lateinit var button: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
-        checkAndGetLocation()
+        button = findViewById(R.id.buttton)
 
-        val lon = sharedPreferencesManager.getString("lon", "")
-        val lat = sharedPreferencesManager.getString("lat", "")
+        val currentLocale = resources.configuration.locales.get(0)
+        val language = currentLocale.language
+        val country = currentLocale.country
+        Log.d("Lanueage", language)
+
+
+        button.setOnClickListener {
+            checkAndGetLocation()
+        }
+
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
-//        mainViewModel.currentWeatherData.observe(this){
-//            Log.d("TestCleanArchAndDagger", it.toString())
-//        }
 
         CoroutineScope(Dispatchers.IO).launch{
             mainViewModel.loadData("Almaty")
             withContext(Dispatchers.Main){
                 mainViewModel.currentWeatherData.observe(this@MainActivity){
                     Log.d("TestCleanArchAndDagger", it.toString())
-
                     for (day in it.days){
                         for (hour in day.hour){
                             Log.d("TestCleanArchAndDaggerHours", hour.toString())
                         }
-
                     }
                 }
 
@@ -94,8 +95,10 @@ class MainActivity : AppCompatActivity() {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                 ) {
+                    Log.d("MainActivity", "onRequestPermissionsResult Доступ дали")
                     getCurrentLocation()
                 } else {
+                    Log.d("MainActivity", "onRequestPermissionsResult Отказали")
                     // Разрешение было отклонено. Вы можете показать объяснение, если считаете это необходимым
                 }
                 return
@@ -124,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestLocationPermission()
+//            requestLocationPermission()
             return
         }
         fusedLocationClient.lastLocation
@@ -136,9 +139,11 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferencesManager.saveString("lat", location?.latitude.toString())
                 sharedPreferencesManager.saveString("lon", location?.longitude.toString())
 
-
-                longitude = location?.longitude.toString()
-                latitude = location?.latitude.toString()
+                if (location != null) {
+                    Log.d("MainActivityGetLocation", "getCurrentLocation ${location.latitude}")
+                }
+//                longitude = location?.longitude.toString()
+//                latitude = location?.latitude.toString()
 
 
             }
@@ -160,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val REQUEST_LOCATION_PERMISSION = 1
+       private const val REQUEST_LOCATION_PERMISSION = 1
     }
 }
 
