@@ -35,7 +35,7 @@ class ThirdScreen : Fragment() {
         view.findViewById<TextView>(R.id.finishButton).setOnClickListener {
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
-            findNavController().navigate(R.id.action_viewPagerFragment_to_mainActivity2)
+
 
 
 //            val navController = findNavController()
