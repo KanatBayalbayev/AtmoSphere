@@ -95,10 +95,10 @@ class MainActivity : AppCompatActivity() {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    Log.d("MainActivity", "onRequestPermissionsResult Доступ дали")
+                    Log.d("onRequestPermissionsResult", "onRequestPermissionsResult Доступ дали")
                     getCurrentLocation()
                 } else {
-                    Log.d("MainActivity", "onRequestPermissionsResult Отказали")
+                    Log.d("onRequestPermissionsResult", "onRequestPermissionsResult Отказали")
                     // Разрешение было отклонено. Вы можете показать объяснение, если считаете это необходимым
                 }
                 return
