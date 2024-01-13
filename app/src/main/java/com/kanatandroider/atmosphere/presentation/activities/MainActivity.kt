@@ -1,6 +1,7 @@
 package com.kanatandroider.atmosphere.presentation.activities
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kanatandroider.atmosphere.R
@@ -42,6 +45,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
+
+
+
+
         button = findViewById(R.id.buttton)
 
         val currentLocale = resources.configuration.locales.get(0)
@@ -83,6 +90,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -95,10 +104,16 @@ class MainActivity : AppCompatActivity() {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    Log.d("onRequestPermissionsResult", "onRequestPermissionsResult Доступ дали")
+                    Log.d("MainActivityGetLocation", "onRequestPermissionsResult Доступ дали")
+
+
                     getCurrentLocation()
+                    onBoardingFinished()
+                    val intent = Intent(this, CurrentWeatherActivity::class.java)
+                    startActivity(intent)
+
                 } else {
-                    Log.d("onRequestPermissionsResult", "onRequestPermissionsResult Отказали")
+                    Log.d("MainActivityGetLocation", "onRequestPermissionsResult Отказали")
                     // Разрешение было отклонено. Вы можете показать объяснение, если считаете это необходимым
                 }
                 return
@@ -164,8 +179,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun onBoardingFinished(){
+        sharedPreferencesManager.saveFinishedViewPagerContainerState("FinishedViewPager", true)
+    }
     companion object {
        private const val REQUEST_LOCATION_PERMISSION = 1
     }
+
+
 }
 
