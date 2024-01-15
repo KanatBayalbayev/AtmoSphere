@@ -9,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.presentation.onboarding.screens.FirstScreen
 import com.kanatandroider.atmosphere.presentation.onboarding.screens.SecondScreen
-import com.kanatandroider.atmosphere.presentation.onboarding.screens.ThirdScreen
 
 
 class ViewPagerFragment : Fragment() {
@@ -24,8 +23,7 @@ class ViewPagerFragment : Fragment() {
 
         val fragmentList = arrayListOf<Fragment>(
             FirstScreen(),
-            SecondScreen(),
-            ThirdScreen()
+            SecondScreen()
         )
 
         val viewPagerAdapter = ViewPagerAdapter(

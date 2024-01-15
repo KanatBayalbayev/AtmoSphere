@@ -9,14 +9,14 @@ class SharedPreferencesManager(context: Context) {
         Context.MODE_PRIVATE
     )
 
-    fun saveString(key: String, value: String) {
+    fun saveLocation(key: String, value: String) {
         with(prefs.edit()) {
             putString(key, value)
             apply()
         }
     }
 
-    fun getString(key: String, defaultValue: String): String? {
+    fun getLocation(key: String, defaultValue: String): String? {
         return prefs.getString(key, defaultValue)
     }
 

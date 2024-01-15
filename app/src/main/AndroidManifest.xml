@@ -22,9 +22,6 @@
             android:name=".presentation.activities.CurrentWeatherActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.activities.UserLocationActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>

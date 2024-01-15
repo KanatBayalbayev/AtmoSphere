@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kanatandroider.atmosphere.R
+import com.kanatandroider.atmosphere.databinding.ActivityMainBinding
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModel
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModelFactory
 import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
@@ -27,12 +28,14 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
+//    @Inject
+//    lateinit var mainViewModelFactory: MainViewModelFactory
+
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
-    private lateinit var mainViewModel: MainViewModel
+//    private lateinit var mainViewModel: MainViewModel
 
     private val component by lazy {
         (application as MyApplication).component
@@ -42,7 +45,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
 
@@ -62,34 +66,33 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
+//        mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
-        CoroutineScope(Dispatchers.IO).launch{
-            mainViewModel.loadData("Almaty")
-            withContext(Dispatchers.Main){
-                mainViewModel.currentWeatherData.observe(this@MainActivity){
-                    Log.d("TestCleanArchAndDagger", it.toString())
-                    for (day in it.days){
-                        for (hour in day.hour){
-                            Log.d("TestCleanArchAndDaggerHours", hour.toString())
-                        }
-                    }
-                }
-
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            mainViewModel.loadData("Almaty")
+//            withContext(Dispatchers.Main) {
+//                mainViewModel.currentWeatherData.observe(this@MainActivity) {
+//                    Log.d("TestCleanArchAndDagger", it.toString())
+//                    for (day in it.days) {
+//                        for (hour in day.hour) {
+//                            Log.d("TestCleanArchAndDaggerHours", hour.toString())
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
 
     }
 
-    private fun checkAndGetLocation(){
+
+    private fun checkAndGetLocation() {
         if (checkLocationPermission()) {
             getCurrentLocation()
         } else {
             requestLocationPermission()
         }
     }
-
-
 
 
     override fun onRequestPermissionsResult(
@@ -114,7 +117,6 @@ class MainActivity : AppCompatActivity() {
 
                 } else {
                     Log.d("MainActivityGetLocation", "onRequestPermissionsResult Отказали")
-                    // Разрешение было отклонено. Вы можете показать объяснение, если считаете это необходимым
                 }
                 return
             }
@@ -142,24 +144,18 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-//            requestLocationPermission()
             return
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val data = service.getData(city = "$location?.latitude,$location?.longitude")
-//                    Log.d("DataForWork", data.toString())
-//                }
-                sharedPreferencesManager.saveString("lat", location?.latitude.toString())
-                sharedPreferencesManager.saveString("lon", location?.longitude.toString())
 
                 if (location != null) {
-                    Log.d("MainActivityGetLocation", "getCurrentLocation ${location.latitude}")
+                    Log.d("MainActivityGetLocation", "getCurrentLocation \"${location.latitude},${location.longitude}\"")
+                    sharedPreferencesManager.saveLocation(
+                        "location",
+                        "${location.latitude},${location.longitude}"
+                    )
                 }
-//                longitude = location?.longitude.toString()
-//                latitude = location?.latitude.toString()
-
 
             }
     }
@@ -179,11 +175,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun onBoardingFinished(){
+    private fun onBoardingFinished() {
         sharedPreferencesManager.saveFinishedViewPagerContainerState("FinishedViewPager", true)
     }
+
     companion object {
-       private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
 

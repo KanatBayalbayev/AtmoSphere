@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">AtmoSphere</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">App</string>
     <string name="thrid_screen">Third Screen</string>
     <string name="second_screen">Second Screen</string>
     <string name="first_screen">First Screen</string>
-    <string name="splash_fragment">Splash Fragment</string>
+    <string name="main_text">AtmoSphere</string>
     <string name="finish_button">Finish</string>
     <string name="next_button">Next</string>
-    <string name="get_location_activity">Get Location Activity</string>
+    <string name="get_location_activity">Get Location</string>
     <string name="user_location_fragment">User Location Fragment</string>
+    <string name="splash_text">Always stay updated on the weather!</string>
+    <string name="firstscreendesk">Discover accurate and timely weather forecasts wherever you are.\nPlan your week with ease using our 7-day forecast</string>
+    <string name="secondscreendesk">Use hourly updates to stay informed of upcoming weather changes.\nStay safe and enjoy comfort, knowing that you are prepared for any weather conditions</string>
+    <string name="firstscreenslogan">Weather under control \n- every day, every hour</string>
 </resources>
