@@ -13,4 +13,6 @@
     <string name="firstscreendesk">Discover accurate and timely weather forecasts wherever you are.\nPlan your week with ease using our 7-day forecast</string>
     <string name="secondscreendesk">Use hourly updates to stay informed of upcoming weather changes.\nStay safe and enjoy comfort, knowing that you are prepared for any weather conditions</string>
     <string name="firstscreenslogan">Weather under control \n- every day, every hour</string>
+    <string name="today_title">Today</string>
+    <string name="next_7_days_title">Next 7 days</string>
 </resources>

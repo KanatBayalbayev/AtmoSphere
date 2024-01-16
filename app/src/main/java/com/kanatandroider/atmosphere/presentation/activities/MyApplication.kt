@@ -10,9 +10,15 @@ class MyApplication : Application() {
 //    lateinit var workerFactory: UpdateDataFactory
 
 
+//    val component by lazy {
+//        DaggerApplicationComponent.factory().create(this)
+//    }
+
     val component by lazy {
         DaggerApplicationComponent.factory().create(this)
     }
+
+
     override fun onCreate() {
         component.inject(this)
         super.onCreate()

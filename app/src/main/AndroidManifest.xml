@@ -19,6 +19,9 @@
         android:theme="@style/Theme.AtmoSphere"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.activities.NextDaysActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.activities.CurrentWeatherActivity"
             android:exported="false" />
         <activity

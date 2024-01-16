@@ -25,6 +25,11 @@ class WeatherRepositoryImpl @Inject constructor(
         return weatherDAO.getCurrentWeather().map {
             val listType = object : TypeToken<List<ForcastDayEntity>>() {}.type
             val myObjectList: List<ForcastDayEntity> = gson.fromJson(it.forecastday, listType)
+            for (data in myObjectList){
+                val hours = data.hour
+                Log.d("EntityfromJsontestMaker", hours.toString())
+            }
+
             mapper.mapDatabaseToEntity(it, myObjectList)
         }
     }

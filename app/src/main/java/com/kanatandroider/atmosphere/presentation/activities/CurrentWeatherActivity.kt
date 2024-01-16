@@ -1,14 +1,15 @@
 package com.kanatandroider.atmosphere.presentation.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.kanatandroider.atmosphere.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kanatandroider.atmosphere.databinding.ActivityCurrentWeatherBinding
-import com.kanatandroider.atmosphere.databinding.ActivityMainBinding
+import com.kanatandroider.atmosphere.domain.models.HourEntity
+import com.kanatandroider.atmosphere.presentation.adapters.hours.HoursAdapter
 import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModel
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModelFactory
@@ -41,23 +42,37 @@ class CurrentWeatherActivity : AppCompatActivity() {
         sharedPreferencesManager = SharedPreferencesManager(this)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
+        val adapter = HoursAdapter(this)
+        binding.recyclerViewCurrentDayHours.adapter = adapter
+
+        adapter.onHourClickListener = object : HoursAdapter.OnHourClickListener{
+            override fun onHourClick(hourEntity: HourEntity) {
+                Log.d("HourDetails", hourEntity.toString())
+            }
+
+        }
+
         val location = sharedPreferencesManager.getLocation("location", "")
         if (location != null) {
             CoroutineScope(Dispatchers.IO).launch {
-//                withContext(Dispatchers.Main) {
-////                    binding.progressBar.visibility = View.VISIBLE
-//                }
+                withContext(Dispatchers.Main) {
+//                    binding.progressBar.visibility = View.VISIBLE
+                }
                 try {
-                    mainViewModel.loadData(location)
+                    mainViewModel.loadData("Almaty")
                     withContext(Dispatchers.Main) {
                         mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
                             Log.d("CurrentWeatherActivity", it.toString())
-                            binding.cityName.visibility = View.VISIBLE
-                            binding.cityName.text = it.name
+                            binding.cityNameTV.text = it.name
+                            binding.currentDayTemperatureTV.text = it.currentTempC.toString()
+                            val days = it.days
                             for (day in it.days) {
-                                for (hour in day.hour) {
-                                    Log.d("CurrentWeatherActivity", hour.toString())
-                                }
+                                val hoursList = day.hour
+                                Log.d("hoursList", hoursList.toString())
+                                adapter.submitList(hoursList)
+//                                for (hour in day.hour) {
+//                                    Log.d("CurrentWeatherActivity", hour.toString())
+//                                }
                             }
 //                            binding.progressBar.visibility = View.GONE
                         }
@@ -65,24 +80,43 @@ class CurrentWeatherActivity : AppCompatActivity() {
                 } catch (e: Exception){
                     withContext(Dispatchers.Main) {
                         mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
-                            if (it == null){
-                                Log.d("CurrentWeatherActivity", "it is null")
-                            }
+//                            if (it == null){
+//                                Log.d("CurrentWeatherActivity", "it is null")
+//                            }
                             Log.d("CurrentWeatherActivity", it.toString())
-                            binding.cityName.visibility = View.VISIBLE
-                            binding.cityName.text = it.name
+//                            binding.cityName.visibility = View.VISIBLE
+//                            binding.cityName.text = it.name
                             for (day in it.days) {
-                                for (hour in day.hour) {
-                                    Log.d("CurrentWeatherActivity", hour.toString())
-                                }
+                                val hoursList = day.hour
+                                Log.d("hoursList", hoursList.toString())
+                                adapter.submitList(hoursList)
+//                                for (hour in day.hour) {
+//                                    Log.d("CurrentWeatherActivity", hour.toString())
+//                                }
                             }
                         }
-                        Toast.makeText(this@CurrentWeatherActivity, "Ошибка: Нет интернет соединения", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@CurrentWeatherActivity,
+                            "Ошибка: Нет интернет соединения",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
 
                 }
 
             }
+        }
+
+        val layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        binding.recyclerViewCurrentDayHours.layoutManager = layoutManager
+
+        binding.next7daysButton.setOnClickListener {
+            val intent = Intent(this, NextDaysActivity::class.java)
+            startActivity(intent)
         }
     }
 

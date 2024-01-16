@@ -28,14 +28,14 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-//    @Inject
-//    lateinit var mainViewModelFactory: MainViewModelFactory
+    @Inject
+    lateinit var mainViewModelFactory: MainViewModelFactory
 
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
-//    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     private val component by lazy {
         (application as MyApplication).component
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
 //        CoroutineScope(Dispatchers.IO).launch {
 //            mainViewModel.loadData("Almaty")
