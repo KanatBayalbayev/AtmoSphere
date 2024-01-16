@@ -13,9 +13,9 @@ data class HourDTO(
     @SerializedName("temp_c")
     @Expose
     val tempC: Double,
-//    @SerializedName("condition")
-//    @Expose
-//    val condition: ConditionDTO,
+    @SerializedName("condition")
+    @Expose
+    val condition: ConditionDTO,
     @SerializedName("wind_kph")
     @Expose
     val windKph: Double,

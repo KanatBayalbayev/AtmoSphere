@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kanatandroider.atmosphere.data.api.models.ForecastdayDTO
 import com.kanatandroider.atmosphere.data.api.network.ApiService
 import com.kanatandroider.atmosphere.data.database.WeatherDAO
 import com.kanatandroider.atmosphere.data.mapper.WeatherMapper
@@ -26,7 +27,7 @@ class WeatherRepositoryImpl @Inject constructor(
             val listType = object : TypeToken<List<ForcastDayEntity>>() {}.type
             val myObjectList: List<ForcastDayEntity> = gson.fromJson(it.forecastday, listType)
             for (data in myObjectList){
-                val hours = data.hour
+                val hours = data
                 Log.d("EntityfromJsontestMaker", hours.toString())
             }
 

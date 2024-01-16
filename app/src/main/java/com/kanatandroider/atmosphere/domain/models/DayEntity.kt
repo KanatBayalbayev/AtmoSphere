@@ -6,8 +6,16 @@ import com.kanatandroider.atmosphere.data.api.models.ConditionDTO
 
 
 data class DayEntity(
+    @SerializedName("maxtemp_c")
+    @Expose
     val maxtempC: Double,
+    @SerializedName("mintemp_c")
+    @Expose
     val mintempC: Double,
+    @SerializedName("daily_chance_of_rain")
+    @Expose
     val dailyChanceOfRain: Int,
-    val condition: ConditionEntity,
+    @SerializedName("condition")
+    @Expose
+    val condition: ConditionDTO,
 )
