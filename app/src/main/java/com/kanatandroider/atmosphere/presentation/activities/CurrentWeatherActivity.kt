@@ -131,7 +131,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
         }
 
 
-        Log.d("CurrentWeatherActivityDate", currentDate)
+//        Log.d("CurrentWeatherActivityDate", currentDate)
 
     }
 

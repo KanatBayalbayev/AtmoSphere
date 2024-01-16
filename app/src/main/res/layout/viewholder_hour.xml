@@ -27,7 +27,6 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/currentDayHourIconIV"
             android:layout_gravity="center"
-            app:lottie_rawRes="@raw/rain"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             android:layout_width="60dp"
