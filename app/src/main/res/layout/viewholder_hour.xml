@@ -24,13 +24,14 @@
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_gravity="center"
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/currentDayHourIconIV"
-            android:src="@mipmap/ic_launcher"
-            android:layout_marginBottom="8dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_gravity="center"
+            app:lottie_rawRes="@raw/rain"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
         <TextView
             android:id="@+id/currentDayHourTempTV"
             android:textAlignment="center"

@@ -8,6 +8,7 @@ import com.kanatandroider.atmosphere.data.api.models.HourDTO
 
 
 data class ForcastDayEntity(
+
     @SerializedName("date")
     @Expose
     val date: String,
@@ -20,4 +21,5 @@ data class ForcastDayEntity(
     @SerializedName("hour")
     @Expose
     val hour: List<HourEntity>
+
 )

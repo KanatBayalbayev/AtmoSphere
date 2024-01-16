@@ -1,9 +1,11 @@
 package com.kanatandroider.atmosphere.presentation.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class CurrentWeatherActivity : AppCompatActivity() {
@@ -28,11 +32,13 @@ class CurrentWeatherActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     private lateinit var binding: ActivityCurrentWeatherBinding
+    private var currentDate: String = ""
 
     private val component by lazy {
         (application as MyApplication).component
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
@@ -51,7 +57,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
             }
 
         }
-
+        currentDate = getCurrentDate()
         val location = sharedPreferencesManager.getLocation("location", "")
         if (location != null) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -59,7 +65,8 @@ class CurrentWeatherActivity : AppCompatActivity() {
 //                    binding.progressBar.visibility = View.VISIBLE
                 }
                 try {
-                    mainViewModel.loadData("Almaty")
+
+                    mainViewModel.loadData(location)
                     withContext(Dispatchers.Main) {
                         mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
                             Log.d("CurrentWeatherActivity", it.toString())
@@ -67,9 +74,12 @@ class CurrentWeatherActivity : AppCompatActivity() {
                             binding.currentDayTemperatureTV.text = it.currentTempC.toString()
                             val days = it.days
                             for (day in it.days) {
-                                val hoursList = day.hour
-                                Log.d("hoursList", hoursList.toString())
-                                adapter.submitList(hoursList)
+                                if (day.date == currentDate){
+                                    val hoursList = day.hour
+                                    Log.d("hoursList", hoursList.toString())
+                                    adapter.submitList(hoursList)
+                                }
+
 //                                for (hour in day.hour) {
 //                                    Log.d("CurrentWeatherActivity", hour.toString())
 //                                }
@@ -87,6 +97,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
 //                            binding.cityName.visibility = View.VISIBLE
 //                            binding.cityName.text = it.name
                             for (day in it.days) {
+
                                 val hoursList = day.hour
                                 Log.d("hoursList", hoursList.toString())
                                 adapter.submitList(hoursList)
@@ -118,6 +129,10 @@ class CurrentWeatherActivity : AppCompatActivity() {
             val intent = Intent(this, NextDaysActivity::class.java)
             startActivity(intent)
         }
+
+
+        Log.d("CurrentWeatherActivityDate", currentDate)
+
     }
 
 
@@ -130,5 +145,12 @@ class CurrentWeatherActivity : AppCompatActivity() {
         finishAffinity()
         super.onBackPressed()
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
     }
 }
