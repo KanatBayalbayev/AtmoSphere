@@ -28,6 +28,10 @@
 <!--            app:lottie_autoPlay="true"-->
 <!--            app:lottie_loop="true" />-->
 
+
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,18 +41,20 @@
                 android:id="@+id/cityNameTV"
                 android:textSize="34sp"
                 android:textColor="@color/white"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Almaty"/>
-            <ImageView
+
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/currentDayWeatherIconIV"
-                android:src="@mipmap/ic_launcher"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"/>
+                android:layout_marginTop="0dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_width="220dp"
+                android:layout_height="220dp"/>
 
             <TextView
                 android:id="@+id/currentDayWeatherConditionTV"
@@ -59,6 +65,7 @@
                 tools:text="Sunny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
             <TextView
                 android:id="@+id/currentDayTemperatureTV"
                 android:layout_marginTop="14dp"
@@ -67,6 +74,15 @@
                 android:textSize="66sp"
                 android:textColor="@color/white"
                 tools:text="24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/currentDayWeatherFeelsLikeTV"
+                android:layout_marginTop="0dp"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:textColor="@android:color/darker_gray"
+                tools:text="Feeling like 27"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

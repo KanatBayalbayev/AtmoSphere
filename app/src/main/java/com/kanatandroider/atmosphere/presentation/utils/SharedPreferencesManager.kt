@@ -9,6 +9,18 @@ class SharedPreferencesManager(context: Context) {
         Context.MODE_PRIVATE
     )
 
+    fun saveNextDayDate(key: String, value: String) {
+        with(prefs.edit()) {
+            putString(key, value)
+            apply()
+        }
+    }
+
+    fun getNextDayDate(key: String, defaultValue: String): String? {
+        return prefs.getString(key, defaultValue)
+    }
+
+
     fun saveLocation(key: String, value: String) {
         with(prefs.edit()) {
             putString(key, value)
@@ -20,27 +32,27 @@ class SharedPreferencesManager(context: Context) {
         return prefs.getString(key, defaultValue)
     }
 
-    fun saveLatitude(key: String, value: String) {
-        with(prefs.edit()) {
-            putString(key, value)
-            apply()
-        }
-    }
-
-    fun getLatitude(key: String, defaultValue: String): String? {
-        return prefs.getString(key, defaultValue)
-    }
-
-    fun saveLongitude(key: String, value: String) {
-        with(prefs.edit()) {
-            putString(key, value)
-            apply()
-        }
-    }
-
-    fun getLongitude(key: String, defaultValue: String): String? {
-        return prefs.getString(key, defaultValue)
-    }
+//    fun saveLatitude(key: String, value: String) {
+//        with(prefs.edit()) {
+//            putString(key, value)
+//            apply()
+//        }
+//    }
+//
+//    fun getLatitude(key: String, defaultValue: String): String? {
+//        return prefs.getString(key, defaultValue)
+//    }
+//
+//    fun saveLongitude(key: String, value: String) {
+//        with(prefs.edit()) {
+//            putString(key, value)
+//            apply()
+//        }
+//    }
+//
+//    fun getLongitude(key: String, defaultValue: String): String? {
+//        return prefs.getString(key, defaultValue)
+//    }
 
     fun saveFinishedViewPagerContainerState(key: String, value: Boolean) {
         with(prefs.edit()) {

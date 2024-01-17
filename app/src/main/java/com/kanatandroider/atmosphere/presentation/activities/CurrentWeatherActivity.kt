@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.databinding.ActivityCurrentWeatherBinding
 import com.kanatandroider.atmosphere.domain.models.HourEntity
 import com.kanatandroider.atmosphere.presentation.adapters.hours.HoursAdapter
@@ -72,6 +73,35 @@ class CurrentWeatherActivity : AppCompatActivity() {
                             Log.d("CurrentWeatherActivity", it.toString())
                             binding.cityNameTV.text = it.name
                             binding.currentDayTemperatureTV.text = it.currentTempC.toString()
+                            binding.currentDayWeatherFeelsLikeTV.text = it.feelsLikeC.toString()
+                            binding.currentDayWeatherConditionTV.text = it.description
+
+                            val code = it.codeOfDescription
+                            if (code == 1000) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sun)
+
+                            } else if (code == 1003) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandclouds)
+
+                            } else if (code in listOf(1006, 1009, 1030, 1135, 1147)) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.clouds)
+
+                            } else if (code in listOf(1063, 1072, 1087,1168, 1171, 1192, 1195, 1198, 1201, 1243, 1246, 1273, 1276)) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rain)
+
+                            } else if (code in listOf(1066, 1069, 1114, 1117, 1207, 1222, 1225, 1237, 1252, 1258, 1261, 1264, 1279, 1282)) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.snow)
+
+                            } else if (code in listOf(1150, 1153, 1180, 1183, 1186, 1189, 1240)) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rainandsun)
+
+                            } else if (code in listOf(1204, 1210, 1213, 1216, 1219, 1249, 1255)) {
+                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandsnow)
+
+                            } else {
+                                ""
+                            }
+
                             val days = it.days
                             for (day in it.days) {
                                 if (day.date == currentDate){

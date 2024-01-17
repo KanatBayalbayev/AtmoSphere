@@ -7,12 +7,16 @@
     <string name="main_text">AtmoSphere</string>
     <string name="finish_button">Finish</string>
     <string name="next_button">Next</string>
-    <string name="get_location_activity">Get Location</string>
+    <string name="show_weather_button">Show Weather</string>
+    <string name="get_location_activity">Your Geolocation</string>
     <string name="user_location_fragment">User Location Fragment</string>
     <string name="splash_text">Always stay updated on the weather!</string>
-    <string name="firstscreendesk">Discover accurate and timely weather forecasts wherever you are.\nPlan your week with ease using our 7-day forecast</string>
-    <string name="secondscreendesk">Use hourly updates to stay informed of upcoming weather changes.\nStay safe and enjoy comfort, knowing that you are prepared for any weather conditions</string>
+    <string name="firstscreendesk">Get precise, timely weather forecasts anywhere.\nEasily plan your week\nwith our 7-day forecast</string>
+    <string name="secondscreendesk">Stay ahead of the weather with hourly updates\nfor safety and comfort</string>
     <string name="firstscreenslogan">Weather under control \n- every day, every hour</string>
     <string name="today_title">Today</string>
     <string name="next_7_days_title">Next 7 days</string>
+    <string name="hint_edittext">Enter a city</string>
+    <string name="your_geolocation">Your Geolocation</string>
+    <string name="or">or</string>
 </resources>

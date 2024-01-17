@@ -4,6 +4,7 @@ import android.app.Application
 import com.kanatandroider.atmosphere.presentation.activities.CurrentWeatherActivity
 import com.kanatandroider.atmosphere.presentation.activities.MainActivity
 import com.kanatandroider.atmosphere.presentation.activities.MyApplication
+import com.kanatandroider.atmosphere.presentation.activities.NextDayDetailsActivity
 import com.kanatandroider.atmosphere.presentation.activities.NextDaysActivity
 import com.kanatandroider.atmosphere.presentation.activities.WelcomeActivity
 import dagger.BindsInstance
@@ -17,6 +18,7 @@ interface ApplicationComponent {
     fun inject(welcomeActivity: WelcomeActivity)
     fun inject(currentWeatherActivity: CurrentWeatherActivity)
     fun inject(nextDaysActivity: NextDaysActivity)
+    fun inject(nextDayDetailsActivity: NextDayDetailsActivity)
 
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Тень -->
+<!--    <item>-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="#50292929"/> &lt;!&ndash; Полупрозрачный черный для эффекта тени &ndash;&gt;-->
+<!--            <corners android:radius="6dp"/> &lt;!&ndash; Скругление углов &ndash;&gt;-->
+<!--        </shape>-->
+<!--    </item>-->
+    <!-- Задний фон с прозрачностью -->
+    <item android:left="5dp" android:top="5dp" android:right="5dp" android:bottom="5dp">
+        <shape android:shape="rectangle">
+<!--            <solid android:color="#80FFFFFF"/> &lt;!&ndash; Полупрозрачный белый для эффекта стекла &ndash;&gt;-->
+            <solid android:color="#294C70"/> <!-- Полупрозрачный белый для эффекта стекла -->
+            <corners android:radius="12dp"/> <!-- Скругление углов -->
+        </shape>
+    </item>
+</layer-list>

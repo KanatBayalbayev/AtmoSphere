@@ -7,6 +7,7 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         (application as MyApplication).component
     }
 
-    private lateinit var button: Button
+    private lateinit var button: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        button = findViewById(R.id.buttton)
+        button = findViewById(R.id.getGeolocationButton)
 
         val currentLocale = resources.configuration.locales.get(0)
         val language = currentLocale.language
