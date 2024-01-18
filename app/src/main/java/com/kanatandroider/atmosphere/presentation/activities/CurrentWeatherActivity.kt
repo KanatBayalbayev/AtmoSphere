@@ -175,11 +175,14 @@ class CurrentWeatherActivity : AppCompatActivity() {
                                 if (day.date == currentDate) {
                                     val hoursList = day.hour
                                     Log.d("hoursList", hoursList.toString())
-                                    adapter.submitList(hoursList)
-                                    indexToScroll = hoursList.indexOfFirst { weather ->
+                                    val indexToScroll = hoursList.indexOfFirst { weather ->
                                         val weatherHour = getHourFromDateTimeString(weather.time)
                                         weatherHour == currentHour
                                     }
+                                    adapter.submitList(hoursList){
+                                        binding.recyclerViewCurrentDayHours.scrollToPosition(indexToScroll)
+                                    }
+
                                 }
                             }
 
@@ -282,9 +285,9 @@ class CurrentWeatherActivity : AppCompatActivity() {
         )
         binding.recyclerViewCurrentDayHours.layoutManager = layoutManager
 
-        if (indexToScroll != -1) {
-            binding.recyclerViewCurrentDayHours.smoothScrollToPosition(indexToScroll)
-        }
+//        if (indexToScroll != -1) {
+//            binding.recyclerViewCurrentDayHours.scrollToPosition(indexToScroll)
+//        }
 
         binding.next7daysButton.setOnClickListener {
             val intent = Intent(this, NextDaysActivity::class.java)
