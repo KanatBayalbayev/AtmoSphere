@@ -2,7 +2,6 @@ package com.kanatandroider.atmosphere.presentation.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.presentation.activities.CurrentWeatherActivity
-import com.kanatandroider.atmosphere.presentation.activities.MainActivity
 import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

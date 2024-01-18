@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import com.kanatandroider.atmosphere.R
-import com.kanatandroider.atmosphere.presentation.activities.MainActivity
+import com.kanatandroider.atmosphere.presentation.activities.LocationActivity
 
 
 class SecondScreen : Fragment() {
@@ -25,7 +25,7 @@ class SecondScreen : Fragment() {
 
         view.findViewById<TextView>(R.id.nextButtonSecondScreen).setOnClickListener {
 //            viewPager?.currentItem = 2
-            val intent = Intent(activity, MainActivity::class.java)
+            val intent = Intent(activity, LocationActivity::class.java)
             startActivity(intent)
         }
 

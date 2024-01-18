@@ -6,33 +6,31 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.kanatandroider.atmosphere.R
-import com.kanatandroider.atmosphere.databinding.ActivityMainBinding
+import com.kanatandroider.atmosphere.databinding.ActivityLocationBinding
+import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModel
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModelFactory
-import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class LocationActivity : AppCompatActivity() {
 
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLocationBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
@@ -42,19 +40,15 @@ class MainActivity : AppCompatActivity() {
         (application as MyApplication).component
     }
 
-    private lateinit var button: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferencesManager = SharedPreferencesManager(this)
 
-
-
-
-        button = findViewById(R.id.getGeolocationButton)
 
         val currentLocale = resources.configuration.locales.get(0)
         val language = currentLocale.language
@@ -62,28 +56,49 @@ class MainActivity : AppCompatActivity() {
         Log.d("Lanueage", language)
 
 
-        button.setOnClickListener {
+        binding.getGeolocationButton.setOnClickListener {
             checkAndGetLocation()
         }
 
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//            mainViewModel.loadData("Almaty")
-//            withContext(Dispatchers.Main) {
-//                mainViewModel.currentWeatherData.observe(this@MainActivity) {
-//                    Log.d("TestCleanArchAndDagger", it.toString())
-//                    for (day in it.days) {
-//                        for (hour in day.hour) {
-//                            Log.d("TestCleanArchAndDaggerHours", hour.toString())
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
+        getUserInput()
+    }
 
+    private fun getUserInput() {
+        binding.userInputButton.setOnClickListener {
+            if (binding.editTextUserInput.text.toString().trim().isEmpty()) {
+                Snackbar.make(it, "Enter a city to get weather!", Snackbar.LENGTH_LONG).show()
+            } else {
+                val userInputCity = binding.editTextUserInput.text.toString()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        mainViewModel.loadData(userInputCity)
+                        sharedPreferencesManager.saveLocation(
+                            "location",
+                            userInputCity
+                        )
+                        onBoardingFinished()
+                        withContext(Dispatchers.Main) {
+                            val intent =
+                                Intent(this@LocationActivity, CurrentWeatherActivity::class.java)
+                            startActivity(intent)
+                        }
+                    } catch (_: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Snackbar.make(
+                                it,
+                                "Нет такого города либо проверьте соединение!",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                }
+
+            }
+        }
     }
 
 
@@ -124,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -151,7 +167,10 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location: Location? ->
 
                 if (location != null) {
-                    Log.d("MainActivityGetLocation", "getCurrentLocation \"${location.latitude},${location.longitude}\"")
+                    Log.d(
+                        "MainActivityGetLocation",
+                        "getCurrentLocation \"${location.latitude},${location.longitude}\""
+                    )
                     sharedPreferencesManager.saveLocation(
                         "location",
                         "${location.latitude},${location.longitude}"

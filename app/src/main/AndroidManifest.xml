@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activities.MainActivity"
+            android:name=".presentation.activities.LocationActivity"
             android:exported="false"
             android:screenOrientation="portrait">
 
