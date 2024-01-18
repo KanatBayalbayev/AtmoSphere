@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -25,9 +26,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class CurrentWeatherActivity : AppCompatActivity() {
 
@@ -40,6 +45,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCurrentWeatherBinding
     private var currentDate: String = ""
     private var location: String? = ""
+    private var indexToScroll: Int = 0
 
     private val component by lazy {
         (application as MyApplication).component
@@ -57,6 +63,10 @@ class CurrentWeatherActivity : AppCompatActivity() {
 
         val adapter = HoursAdapter(this)
         binding.recyclerViewCurrentDayHours.adapter = adapter
+
+        val currentTime = Calendar.getInstance()
+        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+        Log.d("TimeMakerTest", currentHour.toString())
 
         adapter.onHourClickListener = object : HoursAdapter.OnHourClickListener {
             override fun onHourClick(hourEntity: HourEntity) {
@@ -78,11 +88,31 @@ class CurrentWeatherActivity : AppCompatActivity() {
                         binding.progressBar.visibility = View.GONE
                         binding.weatherContainer.visibility = View.VISIBLE
                         mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
-                            Log.d("CurrentWeatherActivity", it.toString())
+                            val days = it.days
+                            val windKmString = getString(R.string.windKm)
+                            val feelinglike = getString(R.string.feelinglike)
+                            val humidityPercent = getString(R.string.humiditypercent)
+                            val dailyChanceOfRain = getString(R.string.dailyChanceOfRain)
+
                             binding.cityNameTV.text = it.name
-                            binding.currentDayTemperatureTV.text = it.currentTempC.toString()
-                            binding.currentDayWeatherFeelsLikeTV.text = it.feelsLikeC.toString()
+                            binding.currentDayTemperatureTV.text = String.format("%s°", it.currentTempC.roundToInt())
+                            binding.currentDayWeatherFeelsLikeTV.text =
+                                String.format(feelinglike, it.feelsLikeC.roundToInt())
                             binding.currentDayWeatherConditionTV.text = it.description
+                            binding.currentDayWindSpeedTV.text =
+                                String.format(windKmString, it.windKph.toString())
+                            binding.currentDayHumidityTV.text =
+                                String.format(humidityPercent, it.humidity)
+
+                            for (day in days) {
+                                if (day.date == currentDate) {
+                                    binding.currentDayPercentOfRainTV.text =
+                                        String.format(dailyChanceOfRain, day.day.dailyChanceOfRain)
+                                }
+
+
+                            }
+
 
                             val code = it.codeOfDescription
                             if (code == 1000) {
@@ -141,17 +171,16 @@ class CurrentWeatherActivity : AppCompatActivity() {
                                 ""
                             }
 
-                            val days = it.days
                             for (day in it.days) {
                                 if (day.date == currentDate) {
                                     val hoursList = day.hour
                                     Log.d("hoursList", hoursList.toString())
                                     adapter.submitList(hoursList)
+                                    indexToScroll = hoursList.indexOfFirst { weather ->
+                                        val weatherHour = getHourFromDateTimeString(weather.time)
+                                        weatherHour == currentHour
+                                    }
                                 }
-
-//                                for (hour in day.hour) {
-//                                    Log.d("CurrentWeatherActivity", hour.toString())
-//                                }
                             }
 
                         }
@@ -245,12 +274,17 @@ class CurrentWeatherActivity : AppCompatActivity() {
             }
         }
 
+
         val layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         binding.recyclerViewCurrentDayHours.layoutManager = layoutManager
+
+        if (indexToScroll != -1) {
+            binding.recyclerViewCurrentDayHours.smoothScrollToPosition(indexToScroll)
+        }
 
         binding.next7daysButton.setOnClickListener {
             val intent = Intent(this, NextDaysActivity::class.java)
@@ -259,7 +293,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
 
 
 //        Log.d("CurrentWeatherActivityDate", currentDate)
-        if (isNetworkAvailable(this)){
+        if (isNetworkAvailable(this)) {
             Log.d("TestConnectIOnMaker", "isON")
             binding.swipeRefreshLayout.isRefreshing = false
         } else {
@@ -270,14 +304,25 @@ class CurrentWeatherActivity : AppCompatActivity() {
 
     }
 
+    fun getHourFromDateTimeString(dateTimeString: String): Int {
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val date = format.parse(dateTimeString)
+        val calendar = Calendar.getInstance().apply {
+            if (date != null) {
+                time = date
+            }
+        }
+        return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+
     override fun onResume() {
         super.onResume()
-        if (isNetworkAvailable(this)){
+        if (isNetworkAvailable(this)) {
             Log.d("TestConnectIOnMaker", "isON")
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     location?.let { it1 -> mainViewModel.loadData(it1) }
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     return@launch
                 }
             }
@@ -289,33 +334,36 @@ class CurrentWeatherActivity : AppCompatActivity() {
         }
     }
 
-    private fun swipeToRefresh(){
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    location?.let { it1 -> mainViewModel.loadData(it1) }
-                    withContext(Dispatchers.Main){
-                        binding.swipeRefreshLayout.isRefreshing = false
+    private fun swipeToRefresh() {
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        location?.let { it1 -> mainViewModel.loadData(it1) }
+                        withContext(Dispatchers.Main) {
+                            binding.swipeRefreshLayout.isRefreshing = false
+                        }
+                    } catch (e: Exception) {
+                        binding.swipeRefreshLayout.isRefreshing = true
+                        return@launch
                     }
-                } catch (e: Exception){
-                    return@launch
                 }
-
             }
         }
-    }
 
-    private fun snackBarNoConnection(){
+
+
+
+    private fun snackBarNoConnection() {
         val snackBar = Snackbar.make(
             binding.mainCurrentWeatherContainer,
             "Ошибка: Нет интернет соединения",
             Snackbar.LENGTH_LONG
         )
-        snackBar.setAction("Update"){
+        snackBar.setAction("Update") {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     location?.let { it1 -> mainViewModel.loadData(it1) }
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     return@launch
                 }
 
@@ -325,7 +373,8 @@ class CurrentWeatherActivity : AppCompatActivity() {
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork ?: return false
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false

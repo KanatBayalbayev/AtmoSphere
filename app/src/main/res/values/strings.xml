@@ -19,4 +19,12 @@
     <string name="hint_edittext">Enter a city</string>
     <string name="your_geolocation">Your Geolocation</string>
     <string name="or">or</string>
+    <string name="rain">Rain</string>
+    <string name="windKm">%skm/h</string>
+    <string name="feelinglike">Feeling like %s°</string>
+    <string name="wind_speed">Wind speed</string>
+    <string name="humiditypercent">%s%%</string>
+    <string name="humidity">Humidity</string>
+    <string name="dailyChanceOfRain">%s%%</string>
+    <string name="currentDayHourTemp">%s°</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.databinding.ViewholderHourBinding
 import com.kanatandroider.atmosphere.domain.models.HourEntity
+import kotlin.math.roundToInt
 
 class HoursAdapter(
     private val context: Context
@@ -27,8 +28,11 @@ class HoursAdapter(
         val weatherHour = getItem(position)
         with(holder.binding){
             with(weatherHour){
-                currentDayHourTimeTV.text = time
-                currentDayHourTempTV.text = tempC.toString()
+                val currentDayHourTemp = context.getString(R.string.currentDayHourTemp)
+
+                currentDayHourTimeTV.text = getHours(time)
+                currentDayHourTempTV.text = String.format(currentDayHourTemp, tempC.roundToInt())
+
                 val iconWeather = ""
 //                val res = when(weatherHour.condition.code){
 //                    1000 -> {context.resources.openRawResource(R.raw.sun)}
@@ -77,5 +81,10 @@ class HoursAdapter(
 
     interface OnHourClickListener {
         fun onHourClick(hourEntity: HourEntity)
+    }
+
+    fun getHours(time: String): String {
+        val parts = time.split(" ")
+        return parts.getOrNull(1).toString()
     }
 }
