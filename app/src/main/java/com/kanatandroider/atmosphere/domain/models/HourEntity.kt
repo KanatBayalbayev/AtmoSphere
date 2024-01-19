@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 import com.kanatandroider.atmosphere.data.api.models.ConditionDTO
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 data class HourEntity(
     @PrimaryKey
@@ -29,4 +32,15 @@ data class HourEntity(
     @SerializedName("chance_of_rain")
     @Expose
     val chanceOfRain: Int,
-)
+){
+    fun getHourFromDateTimeString(): Int {
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val date = format.parse(time)
+        val calendar = Calendar.getInstance().apply {
+            if (date != null) {
+                time = date
+            }
+        }
+        return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+}

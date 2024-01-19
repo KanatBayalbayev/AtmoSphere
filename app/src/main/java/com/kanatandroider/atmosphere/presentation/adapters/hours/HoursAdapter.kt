@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.databinding.ViewholderHourBinding
 import com.kanatandroider.atmosphere.domain.models.HourEntity
+import java.util.Calendar
 import kotlin.math.roundToInt
 
 class HoursAdapter(
@@ -14,6 +15,9 @@ class HoursAdapter(
 ) : ListAdapter<HourEntity, HourViewHolder>(HourDiffCallBack) {
 
     var onHourClickListener: OnHourClickListener? = null
+    private var currentDate: String = ""
+    val currentTime = Calendar.getInstance()
+    val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
         val binding = ViewholderHourBinding.inflate(
@@ -30,7 +34,13 @@ class HoursAdapter(
             with(weatherHour){
                 val currentDayHourTemp = context.getString(R.string.currentDayHourTemp)
 
-                currentDayHourTimeTV.text = getHours(time)
+                if (weatherHour.getHourFromDateTimeString() == currentHour){
+                    currentDayHourTimeTV.text = "Now"
+                } else {
+                    currentDayHourTimeTV.text = getHours(time)
+                }
+
+
                 currentDayHourTempTV.text = String.format(currentDayHourTemp, tempC.roundToInt())
 
                 val iconWeather = ""

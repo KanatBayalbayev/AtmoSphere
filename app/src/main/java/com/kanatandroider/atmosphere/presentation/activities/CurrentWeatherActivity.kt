@@ -86,6 +86,68 @@ class CurrentWeatherActivity : AppCompatActivity() {
                     mainViewModel.loadData(location!!)
                     withContext(Dispatchers.Main) {
                         binding.progressBar.visibility = View.GONE
+                        binding.swipeRefreshLayout.visibility = View.VISIBLE
+                        binding.weatherContainer.visibility = View.VISIBLE
+                        mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
+                            val days = it.days
+                            val windKmString = getString(R.string.windKm)
+                            val feelinglike = getString(R.string.feelinglike)
+                            val humidityPercent = getString(R.string.humiditypercent)
+                            val dailyChanceOfRain = getString(R.string.dailyChanceOfRain)
+
+                            binding.cityNameTV.text = it.name
+                            binding.currentDayTemperatureTV.text = String.format("%s°", it.currentTempC.roundToInt())
+                            binding.currentDayWeatherFeelsLikeTV.text =
+                                String.format(feelinglike, it.feelsLikeC.roundToInt())
+                            binding.currentDayWeatherConditionTV.text = it.description
+                            binding.currentDayWindSpeedTV.text =
+                                String.format(windKmString, it.windKph.toString())
+                            binding.currentDayHumidityTV.text =
+                                String.format(humidityPercent, it.humidity)
+
+                            for (day in days) {
+                                if (day.date == currentDate) {
+                                    binding.currentDayPercentOfRainTV.text =
+                                        String.format(dailyChanceOfRain, day.day.dailyChanceOfRain)
+                                }
+                            }
+
+
+                            val animationResource = when (it.codeOfDescription) {
+                                1000 -> R.raw.sun
+                                1003 -> R.raw.sunandclouds
+                                in listOf(1006, 1009, 1030, 1135, 1147) -> R.raw.clouds
+                                in listOf(1063, 1072, 1087, 1168, 1171, 1192, 1195, 1198, 1201, 1243, 1246, 1273, 1276) -> R.raw.rain
+                                in listOf(1066, 1069, 1114, 1117, 1207, 1222, 1225, 1237, 1252, 1258, 1261, 1264, 1279, 1282) -> R.raw.snow
+                                in listOf(1150, 1153, 1180, 1183, 1186, 1189, 1240) -> R.raw.rainandsun
+                                in listOf(1204, 1210, 1213, 1216, 1219, 1249, 1255) -> R.raw.sunandsnow
+                                else -> null
+                            }
+
+                            animationResource?.let { binding.currentDayWeatherIconIV.setAnimation(it) }
+
+                            for (day in it.days) {
+                                if (day.date == currentDate) {
+                                    val hoursList = day.hour
+                                    Log.d("hoursList", hoursList.toString())
+                                    val indexToScroll = hoursList.indexOfFirst { weather ->
+                                        val weatherHour = getHourFromDateTimeString(weather.time)
+                                        weatherHour == currentHour
+                                    }
+                                    adapter.submitList(hoursList){
+                                        binding.recyclerViewCurrentDayHours.scrollToPosition(indexToScroll)
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                } catch (e: Exception) {
+                    snackBarNoConnection()
+                    withContext(Dispatchers.Main) {
+                        binding.progressBar.visibility = View.GONE
+                        binding.swipeRefreshLayout.visibility = View.VISIBLE
                         binding.weatherContainer.visibility = View.VISIBLE
                         mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
                             val days = it.days
@@ -113,156 +175,26 @@ class CurrentWeatherActivity : AppCompatActivity() {
 
                             }
 
-
-                            val code = it.codeOfDescription
-                            if (code == 1000) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sun)
-
-                            } else if (code == 1003) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandclouds)
-
-                            } else if (code in listOf(1006, 1009, 1030, 1135, 1147)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.clouds)
-
-                            } else if (code in listOf(
-                                    1063,
-                                    1072,
-                                    1087,
-                                    1168,
-                                    1171,
-                                    1192,
-                                    1195,
-                                    1198,
-                                    1201,
-                                    1243,
-                                    1246,
-                                    1273,
-                                    1276
-                                )
-                            ) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rain)
-
-                            } else if (code in listOf(
-                                    1066,
-                                    1069,
-                                    1114,
-                                    1117,
-                                    1207,
-                                    1222,
-                                    1225,
-                                    1237,
-                                    1252,
-                                    1258,
-                                    1261,
-                                    1264,
-                                    1279,
-                                    1282
-                                )
-                            ) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.snow)
-
-                            } else if (code in listOf(1150, 1153, 1180, 1183, 1186, 1189, 1240)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rainandsun)
-
-                            } else if (code in listOf(1204, 1210, 1213, 1216, 1219, 1249, 1255)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandsnow)
-
-                            } else {
-                                ""
+                            val animationResource = when (it.codeOfDescription) {
+                                1000 -> R.raw.sun
+                                1003 -> R.raw.sunandclouds
+                                in listOf(1006, 1009, 1030, 1135, 1147) -> R.raw.clouds
+                                in listOf(1063, 1072, 1087, 1168, 1171, 1192, 1195, 1198, 1201, 1243, 1246, 1273, 1276) -> R.raw.rain
+                                in listOf(1066, 1069, 1114, 1117, 1207, 1222, 1225, 1237, 1252, 1258, 1261, 1264, 1279, 1282) -> R.raw.snow
+                                in listOf(1150, 1153, 1180, 1183, 1186, 1189, 1240) -> R.raw.rainandsun
+                                in listOf(1204, 1210, 1213, 1216, 1219, 1249, 1255) -> R.raw.sunandsnow
+                                else -> null
                             }
 
-                            for (day in it.days) {
-                                if (day.date == currentDate) {
-                                    val hoursList = day.hour
-                                    Log.d("hoursList", hoursList.toString())
-                                    val indexToScroll = hoursList.indexOfFirst { weather ->
-                                        val weatherHour = getHourFromDateTimeString(weather.time)
-                                        weatherHour == currentHour
-                                    }
-                                    adapter.submitList(hoursList){
-                                        binding.recyclerViewCurrentDayHours.scrollToPosition(indexToScroll)
-                                    }
+                            animationResource?.let { binding.currentDayWeatherIconIV.setAnimation(it) }
 
-                                }
-                            }
-
-                        }
-                    }
-                } catch (e: Exception) {
-                    snackBarNoConnection()
-                    withContext(Dispatchers.Main) {
-                        binding.progressBar.visibility = View.GONE
-                        binding.weatherContainer.visibility = View.VISIBLE
-                        mainViewModel.currentWeatherData.observe(this@CurrentWeatherActivity) {
-                            Log.d("CurrentWeatherActivity", it.toString())
-                            binding.cityNameTV.text = it.name
-                            binding.currentDayTemperatureTV.text = it.currentTempC.toString()
-                            binding.currentDayWeatherFeelsLikeTV.text = it.feelsLikeC.toString()
-                            binding.currentDayWeatherConditionTV.text = it.description
-
-                            val code = it.codeOfDescription
-                            if (code == 1000) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sun)
-
-                            } else if (code == 1003) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandclouds)
-
-                            } else if (code in listOf(1006, 1009, 1030, 1135, 1147)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.clouds)
-
-                            } else if (code in listOf(
-                                    1063,
-                                    1072,
-                                    1087,
-                                    1168,
-                                    1171,
-                                    1192,
-                                    1195,
-                                    1198,
-                                    1201,
-                                    1243,
-                                    1246,
-                                    1273,
-                                    1276
-                                )
-                            ) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rain)
-
-                            } else if (code in listOf(
-                                    1066,
-                                    1069,
-                                    1114,
-                                    1117,
-                                    1207,
-                                    1222,
-                                    1225,
-                                    1237,
-                                    1252,
-                                    1258,
-                                    1261,
-                                    1264,
-                                    1279,
-                                    1282
-                                )
-                            ) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.snow)
-
-                            } else if (code in listOf(1150, 1153, 1180, 1183, 1186, 1189, 1240)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.rainandsun)
-
-                            } else if (code in listOf(1204, 1210, 1213, 1216, 1219, 1249, 1255)) {
-                                binding.currentDayWeatherIconIV.setAnimation(R.raw.sunandsnow)
-
-                            } else {
-                                ""
-                            }
-
-                            val days = it.days
                             for (day in days) {
                                 if (day.date == currentDate) {
                                     val hoursList = day.hour
                                     Log.d("hoursList", hoursList.toString())
-                                    adapter.submitList(hoursList)
+                                    adapter.submitList(hoursList){
+                                        binding.recyclerViewCurrentDayHours.scrollToPosition(indexToScroll)
+                                    }
                                 }
 
                             }
@@ -335,6 +267,8 @@ class CurrentWeatherActivity : AppCompatActivity() {
             Log.d("TestConnectIOnMaker", "isOFF")
             snackBarNoConnection()
         }
+
+
     }
 
     private fun swipeToRefresh() {

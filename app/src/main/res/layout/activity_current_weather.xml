@@ -8,11 +8,26 @@
     android:background="@drawable/splash_gradient_background"
     tools:context=".presentation.activities.CurrentWeatherActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressBar"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/progressbar" />
+
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,20 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/progressBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/progressbar" />
-
 
                 <LinearLayout
                     android:id="@+id/weatherContainer"
@@ -57,7 +58,7 @@
                             android:id="@+id/cityNameTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="60dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="34sp"
@@ -72,20 +73,17 @@
                             android:layout_height="250dp"
                             android:layout_gravity="center"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/cityNameTV"
                             app:lottie_autoPlay="true"
-                            app:lottie_loop="true"
-                            app:lottie_speed="0.8" />
+                            app:lottie_loop="true" />
 
                         <TextView
                             android:id="@+id/currentDayWeatherConditionTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="-30dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="26sp"
+                            android:textSize="22sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/currentDayWeatherIconIV"
@@ -93,29 +91,32 @@
 
                         <TextView
                             android:id="@+id/currentDayTemperatureTV"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="66sp"
                             android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/currentDayWeatherIconIV"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/currentDayWeatherConditionTV"
+                            app:layout_constraintTop_toBottomOf="@+id/cityNameTV"
                             tools:text="24" />
 
                         <TextView
                             android:id="@+id/currentDayWeatherFeelsLikeTV"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
                             android:layout_marginTop="-10dp"
+                            android:text="@string/feelinglike"
                             android:textAlignment="center"
                             android:textColor="@android:color/darker_gray"
                             android:textSize="20sp"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/currentDayWeatherIconIV"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/currentDayTemperatureTV"
-                            android:text="@string/feelinglike" />
+                            app:layout_constraintTop_toBottomOf="@+id/currentDayTemperatureTV" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -125,9 +126,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="6dp"
+                        android:layout_marginBottom="12dp"
                         android:backgroundTint="#294C70"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="6dp">
@@ -160,17 +161,17 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="3dp"
                                     android:layout_marginBottom="3dp"
+                                    android:text="@string/dailyChanceOfRain"
                                     android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:text="@string/dailyChanceOfRain" />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:text="@string/rain"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    android:text="@string/rain" />
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -193,17 +194,17 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="3dp"
                                     android:layout_marginBottom="3dp"
+                                    android:text="@string/windKm"
                                     android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:text="@string/windKm" />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:text="@string/wind_speed"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    android:text="@string/wind_speed" />
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -226,17 +227,17 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="3dp"
                                     android:layout_marginBottom="3dp"
+                                    android:text="@string/humiditypercent"
                                     android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:text="@string/humiditypercent" />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:text="@string/humidity"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    android:text="@string/humidity" />
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -248,6 +249,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:orientation="horizontal">
 
                         <TextView

@@ -41,9 +41,10 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="8dp"
                 android:backgroundTint="#294C70"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -58,12 +59,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <ImageView
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/tomorrowIconIV"
                             android:layout_width="0dp"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
                             android:layout_height="150dp"
                             android:layout_margin="16dp"
-                            android:layout_weight="1"
-                            android:src="@mipmap/ic_launcher" />
+                            android:layout_weight="1"/>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -78,20 +82,30 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
-                                android:textSize="20sp"
-                                tools:text="Tommorow" />
+                                android:textStyle="bold"
+                                android:textSize="24sp"
+                                android:text="Tomorrow" />
 
                             <TextView
+                                android:id="@+id/nextDayMaxTemp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:textColor="@color/white"
-                                android:textSize="44sp"
-                                android:textStyle="bold"
-                                tools:text="25" />
+                                android:textSize="20sp"
+                                android:text="@string/nextDayMaxTemp" />
+                            <TextView
+                                android:id="@+id/nextDayMinTemp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:text="@string/nextDayMinTemp" />
 
                             <TextView
+                                android:id="@+id/nextDayCondition"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
@@ -103,123 +117,115 @@
 
                     </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="6dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:backgroundTint="#294C70"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/glass_background"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
 
                         <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_margin="0dp"
-                            android:background="@drawable/glass_background"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:baselineAligned="false">
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/rain" />
 
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_margin="8dp"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/nextDayPercentOfRainTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="3dp"
+                                android:text="@string/nextDayDailyChanceOfRain"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
 
-                                <ImageView
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/rain"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"/>
-                                <TextView
-                                    android:id="@+id/currentDayPercentOfRainTV"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    tools:text="22%"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-                                <TextView
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    tools:text="Rain"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_margin="8dp"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/wind"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"/>
-                                <TextView
-                                    android:id="@+id/currentDayWindSpeedTV"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    tools:text="12mph"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    tools:text="Wind speed" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_margin="8dp"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/humidity"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"/>
-                                <TextView
-                                    android:id="@+id/currentDayHumidityTV"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    tools:text="22%"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-                                <TextView
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    tools:text="Humidity"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                            </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/rain"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
-                    </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/wind" />
+
+                            <TextView
+                                android:id="@+id/nextDayWindSpeedTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="3dp"
+                                android:text="@string/nextDayWindKm"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/wind_speed"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/humidity" />
+
+                            <TextView
+                                android:id="@+id/nextDayHumidityTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="3dp"
+                                android:text="@string/nextDayHumiditypercent"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/humidity"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
 
                 </LinearLayout>

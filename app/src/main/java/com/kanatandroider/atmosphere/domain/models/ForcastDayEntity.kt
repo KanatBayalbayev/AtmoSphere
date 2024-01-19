@@ -1,10 +1,13 @@
 package com.kanatandroider.atmosphere.domain.models
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.kanatandroider.atmosphere.data.api.models.AstroDTO
-import com.kanatandroider.atmosphere.data.api.models.DayDTO
-import com.kanatandroider.atmosphere.data.api.models.HourDTO
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 data class ForcastDayEntity(
@@ -22,4 +25,19 @@ data class ForcastDayEntity(
     @Expose
     val hour: List<HourEntity>
 
-)
+) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDayNameOfTheWeek(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val dateReady = LocalDate.parse(date, formatter)
+        return dateReady.dayOfWeek.toString()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatMonthAndDay(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(date, formatter)
+        return date.format(DateTimeFormatter.ofPattern("MMM, dd", Locale.US))
+    }
+
+}
