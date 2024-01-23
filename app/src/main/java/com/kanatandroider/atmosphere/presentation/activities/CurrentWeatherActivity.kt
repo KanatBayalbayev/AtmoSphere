@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -236,6 +237,21 @@ class CurrentWeatherActivity : AppCompatActivity() {
         }
 
         swipeToRefresh()
+
+        binding.navv.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.findLocation -> {
+                    val intent = Intent(
+                        this,
+                        LocationActivity::class.java
+                    )
+                    startActivity(intent)
+                    binding.mainCurrentWeatherContainer.closeDrawer(GravityCompat.START)
+                }
+            }
+
+            true
+        }
 
     }
 
