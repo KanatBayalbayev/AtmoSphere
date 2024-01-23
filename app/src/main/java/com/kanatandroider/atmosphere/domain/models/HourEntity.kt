@@ -1,11 +1,16 @@
 package com.kanatandroider.atmosphere.domain.models
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 import com.kanatandroider.atmosphere.data.api.models.ConditionDTO
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -42,5 +47,14 @@ data class HourEntity(
             }
         }
         return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatMonthAndDay(): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val outputFormatter = DateTimeFormatter.ofPattern("MMM, dd")
+
+        val dateTime = LocalDateTime.parse(time, inputFormatter)
+        return dateTime.format(outputFormatter)
     }
 }

@@ -14,6 +14,10 @@ import com.kanatandroider.atmosphere.presentation.adapters.days.DaysAdapter
 import com.kanatandroider.atmosphere.presentation.utils.SharedPreferencesManager
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModel
 import com.kanatandroider.atmosphere.presentation.viewmodel.MainViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -31,6 +35,7 @@ class NextDaysActivity : AppCompatActivity() {
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
     private var currentDate: String = ""
+
 
     private val component by lazy {
         (application as MyApplication).component
@@ -50,6 +55,7 @@ class NextDaysActivity : AppCompatActivity() {
         currentDate = getCurrentDate()
 
         val adapter = DaysAdapter(this)
+
 
         binding.recyclerViewNextDaysRV.adapter = adapter
 
@@ -119,7 +125,25 @@ class NextDaysActivity : AppCompatActivity() {
 
         }
 
+        binding.backToCurrentDayButton.setOnClickListener {
+            val intent = Intent(this, CurrentWeatherActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
+
+    @Deprecated(
+        "Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        val intent = Intent(this, CurrentWeatherActivity::class.java)
+        startActivity(intent)
+        super.onBackPressed()
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentDate(): String {
         val currentDate = LocalDate.now()

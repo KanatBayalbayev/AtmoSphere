@@ -21,17 +21,26 @@
     <string name="or">or</string>
     <string name="rain">Rain</string>
     <string name="nextDayWindKm">%skm/h</string>
+    <string name="chosenDayWindKm">%skm/h</string>
     <string name="windKm">%skm/h</string>
     <string name="feelinglike">Feeling like %s°</string>
     <string name="wind_speed">Wind speed</string>
     <string name="humiditypercent">%s%%</string>
     <string name="nextDayHumiditypercent">%s%%</string>
+    <string name="chosenDayHumiditypercent">%s%%</string>
     <string name="humidity">Humidity</string>
     <string name="dailyChanceOfRain">%s%%</string>
     <string name="nextDayDailyChanceOfRain">%s%%</string>
+    <string name="chosenDayDailyChanceOfRain">%s%%</string>
     <string name="currentDayHourTemp">%s°</string>
+    <string name="chosenDayHourTemp">%s°</string>
     <string name="futureDayMaxTemp">%s°</string>
     <string name="futureDayMinTemp">%s°</string>
     <string name="nextDayMaxTemp">day: %s°</string>
+    <string name="chosenDayMaxTemp">day: %s°</string>
+    <string name="chosenDateTemp">day: %s°</string>
     <string name="nextDayMinTemp">night: %s°</string>
+    <string name="chosenDayMinTemp">night: %s°</string>
+    <string name="chosenDateMinTemp">night: %s°</string>
+    <string name="_7_day_forecast">7-day Forecast</string>
 </resources>
