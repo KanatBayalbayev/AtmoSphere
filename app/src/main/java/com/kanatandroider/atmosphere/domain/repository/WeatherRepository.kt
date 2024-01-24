@@ -10,7 +10,7 @@ interface WeatherRepository {
     fun getCurrentWeather(): LiveData<CurrentWeatherEntity>
 
 
-    suspend fun loadData(city: String)
+    suspend fun loadData(city: String, language: String)
 
 
 }

@@ -11,12 +11,12 @@
     <string name="get_location_activity">Your Geolocation</string>
     <string name="user_location_fragment">User Location Fragment</string>
     <string name="splash_text">Always stay updated on the weather!</string>
-    <string name="firstscreendesk">Get precise, timely weather forecasts anywhere.\nEasily plan your week\nwith our 7-day forecast</string>
+    <string name="firstscreendesk">Get precise, timely weather forecast anywhere.\nEasily plan your week\nwith our 7-day forecast</string>
     <string name="secondscreendesk">Stay ahead of the weather with hourly updates\nfor safety and comfort</string>
     <string name="firstscreenslogan">Weather under control \n- every day, every hour</string>
     <string name="today_title">Today</string>
     <string name="next_7_days_title">Next 7 days</string>
-    <string name="hint_edittext">Enter a city</string>
+    <string name="hint_edittext">Enter the name of a city</string>
     <string name="your_geolocation">Your Geolocation</string>
     <string name="or">or</string>
     <string name="rain">Rain</string>
@@ -43,4 +43,21 @@
     <string name="chosenDayMinTemp">night: %s°</string>
     <string name="chosenDateMinTemp">night: %s°</string>
     <string name="_7_day_forecast">7-day Forecast</string>
+    <string name="noConnection">No Internet Connection</string>
+    <string name="failedToConnect">Failed to connect to the internet</string>
+    <string name="tryAgainButton">Try Again</string>
+    <string name="successConnection">Data successfully updated</string>
+    <string name="search_weather">Search Weather</string>
+    <string name="emptyEditText">Please enter the name of the city to get the weather forecast</string>
+    <string name="failedToGetWeather">Failed to retrieve the weather forecast. Please check the data you entered and your internet connection</string>
+    <string name="failedToGetGeoLocation">Location access denied.\nEnter the name of the city manually</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="backtocurrentdaybutton">backToCurrentDayButton</string>
+    <string name="rainicon">rainIcon</string>
+    <string name="windicon">windIcon</string>
+    <string name="humicon">humIcon</string>
+    <string name="backtonextdaysbutton">backToNextDaysButton</string>
+    <string name="menu">menu</string>
+    <string name="days">Days</string>
+    <string name="day_night">Day/Night</string>
 </resources>

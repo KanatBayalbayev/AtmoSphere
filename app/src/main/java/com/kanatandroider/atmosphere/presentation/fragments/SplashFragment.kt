@@ -33,10 +33,8 @@ class SplashFragment : Fragment() {
 
 
             if (sharedPreferencesManager.getFinishedViewPagerContainerState("FinishedViewPager", false)) {
-                delay(500)
                 val intent = Intent(activity, CurrentWeatherActivity::class.java)
                 startActivity(intent)
-                // или findNavController().navigate(R.id.action_splashFragment_to_mainActivity2)
             } else {
                 delay(3000)
                 findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)

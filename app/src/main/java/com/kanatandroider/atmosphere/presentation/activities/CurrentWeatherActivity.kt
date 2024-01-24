@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +42,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     private lateinit var binding: ActivityCurrentWeatherBinding
+    private lateinit var language: String
     private var currentDate: String = ""
     private var location: String? = ""
 
@@ -58,6 +60,9 @@ class CurrentWeatherActivity : AppCompatActivity() {
 
         sharedPreferencesManager = SharedPreferencesManager(this)
         location = sharedPreferencesManager.getLocation("location", "")
+
+        val currentLocale = resources.configuration.locales.get(0)
+        language = currentLocale.language
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
@@ -88,7 +93,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
                     onLoadingProgress()
                 }
                 try {
-                    mainViewModel.loadData(location!!)
+                    mainViewModel.loadData(location!!, language)
                     withContext(Dispatchers.Main) {
                         offLoadingProgress()
                         observeViewModel(currentHour, adapter)
@@ -163,7 +168,7 @@ class CurrentWeatherActivity : AppCompatActivity() {
         if (isNetworkAvailable(this)) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    location?.let { it1 -> mainViewModel.loadData(it1) }
+                    location?.let { it1 -> mainViewModel.loadData(it1, language) }
                 } catch (e: Exception) {
                     snackBarNoConnection()
                     return@launch
@@ -282,7 +287,12 @@ class CurrentWeatherActivity : AppCompatActivity() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    location?.let { it1 -> mainViewModel.loadData(it1) }
+                    Snackbar.make(
+                        binding.mainCurrentWeatherContainer,
+                        R.string.successConnection,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    location?.let { it1 -> mainViewModel.loadData(it1, language) }
                     withContext(Dispatchers.Main) {
                         binding.swipeRefreshLayout.isRefreshing = false
                     }
@@ -299,22 +309,26 @@ class CurrentWeatherActivity : AppCompatActivity() {
     private fun snackBarNoConnection() {
         val snackBar = Snackbar.make(
             binding.mainCurrentWeatherContainer,
-            "Ошибка: Нет интернет соединения",
+            R.string.noConnection,
             Snackbar.LENGTH_LONG
         )
-        snackBar.setAction("Update") {
+        snackBar.setAction(R.string.tryAgainButton) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    location?.let { it1 -> mainViewModel.loadData(it1) }
+                    Snackbar.make(
+                        binding.mainCurrentWeatherContainer,
+                        R.string.successConnection,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    location?.let { it1 -> mainViewModel.loadData(it1, language) }
                 } catch (e: Exception) {
                     Snackbar.make(
                         binding.mainCurrentWeatherContainer,
-                        "Не получилось подключиться к сети",
+                        R.string.failedToConnect,
                         Snackbar.LENGTH_SHORT
                     ).show()
                     return@launch
                 }
-
             }
         }
         snackBar.show()

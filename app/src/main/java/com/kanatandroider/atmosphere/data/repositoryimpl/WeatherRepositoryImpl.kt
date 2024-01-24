@@ -36,9 +36,10 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun loadData(city: String) {
+    override suspend fun loadData(city: String, language: String) {
         val listData = apiService.getData(
-            cityInput = city
+            cityInput = city,
+            lang = language
         )
         Log.d("DTOtestMaker", listData.toString())
         val gson = Gson()

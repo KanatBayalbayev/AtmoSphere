@@ -14,7 +14,7 @@ interface ApiService {
         @Query(QUERY_DAYS) days: String = DAYS,
         @Query(QUERY_AQI) aqi: String = "no",
         @Query(QUERY_ALERTS) alerts: String = "no",
-        @Query(QUERY_LANG) lang: String = "ru",
+        @Query(QUERY_LANG) lang: String = "",
     ): WeatherDataDTO
 
     private companion object {

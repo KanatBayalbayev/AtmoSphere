@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import com.kanatandroider.atmosphere.R
 import com.kanatandroider.atmosphere.databinding.ActivityNextDaysBinding
@@ -61,18 +62,31 @@ class NextDaysActivity : AppCompatActivity() {
 
         adapter.onDayClickListener = object : DaysAdapter.OnDayClickListener{
             override fun onDayClick(forcastDayEntity: ForcastDayEntity) {
-                Log.d("DaysDetails", forcastDayEntity.toString())
                 sharedPreferencesManager.saveNextDayDate(
                     "nextDayDate",
                     forcastDayEntity.date
                 )
-
                 val intent = Intent(this@NextDaysActivity, NextDayDetailsActivity::class.java)
                 startActivity(intent)
 
             }
         }
 
+        observeViewModel(adapter)
+
+        displayCurrentWeatherActivity()
+
+
+    }
+
+    private fun displayCurrentWeatherActivity(){
+        binding.backToCurrentDayButton.setOnClickListener {
+            val intent = Intent(this, CurrentWeatherActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun observeViewModel(adapter: DaysAdapter){
         mainViewModel.currentWeatherData.observe(this){ currentWeatherEntity ->
             val allDays = currentWeatherEntity.days
             val nextDay = currentWeatherEntity.days[1]
@@ -124,13 +138,6 @@ class NextDaysActivity : AppCompatActivity() {
             binding.nextDayCondition.text = nextDay.day.condition.text
 
         }
-
-        binding.backToCurrentDayButton.setOnClickListener {
-            val intent = Intent(this, CurrentWeatherActivity::class.java)
-            startActivity(intent)
-        }
-
-
     }
 
     @Deprecated(

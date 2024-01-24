@@ -23,7 +23,8 @@
         android:layout_marginTop="30dp"
         android:src="@drawable/arrowleft"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/backtonextdaysbutton" />
 
 
 
@@ -156,7 +157,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/rain" />
+                            android:src="@drawable/rain"
+                            android:contentDescription="@string/rainicon" />
 
                         <TextView
                             android:id="@+id/chosenDayPercentOfRainTV"
@@ -189,7 +191,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/wind" />
+                            android:src="@drawable/wind"
+                            android:contentDescription="@string/windicon" />
 
                         <TextView
                             android:id="@+id/chosenDayWindSpeedTV"
@@ -222,7 +225,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/humidity" />
+                            android:src="@drawable/humidity"
+                            android:contentDescription="@string/humicon" />
 
                         <TextView
                             android:id="@+id/chosenDayHumidityTV"

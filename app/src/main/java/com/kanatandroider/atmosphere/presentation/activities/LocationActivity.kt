@@ -1,11 +1,15 @@
 package com.kanatandroider.atmosphere.presentation.activities
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -35,6 +39,7 @@ class LocationActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var language: String
 
     private val component by lazy {
         (application as MyApplication).component
@@ -51,14 +56,14 @@ class LocationActivity : AppCompatActivity() {
 
 
         val currentLocale = resources.configuration.locales.get(0)
-        val language = currentLocale.language
-        val country = currentLocale.country
-        Log.d("Lanueage", language)
+        language = currentLocale.language
 
+        displayBackLogic()
 
         binding.getGeolocationButton.setOnClickListener {
             checkAndGetLocation()
         }
+
 
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
@@ -66,15 +71,30 @@ class LocationActivity : AppCompatActivity() {
         getUserInput()
     }
 
+    private fun displayBackLogic(){
+        if (sharedPreferencesManager.getFinishedLocationState(
+                "backToCurrentWeatherActivity",
+                false
+            )){
+            binding.backToButton.visibility = View.VISIBLE
+            binding.backToButton.setOnClickListener {
+                val intent = Intent(this, CurrentWeatherActivity::class.java)
+                startActivity(intent)
+            }
+        } else {
+            binding.backToButton.visibility = View.GONE
+        }
+    }
+
     private fun getUserInput() {
         binding.userInputButton.setOnClickListener {
             if (binding.editTextUserInput.text.toString().trim().isEmpty()) {
-                Snackbar.make(it, "Enter a city to get weather!", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(it, R.string.emptyEditText, Snackbar.LENGTH_LONG).show()
             } else {
                 val userInputCity = binding.editTextUserInput.text.toString()
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        mainViewModel.loadData(userInputCity)
+                        mainViewModel.loadData(userInputCity, language)
                         sharedPreferencesManager.saveLocation(
                             "location",
                             userInputCity
@@ -89,7 +109,7 @@ class LocationActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             Snackbar.make(
                                 it,
-                                "Нет такого города либо проверьте соединение!",
+                                R.string.failedToGetWeather,
                                 Snackbar.LENGTH_LONG
                             ).show()
                         }
@@ -127,11 +147,14 @@ class LocationActivity : AppCompatActivity() {
 
 
                     getCurrentLocation()
-                    onBoardingFinished()
-                    val intent = Intent(this, CurrentWeatherActivity::class.java)
-                    startActivity(intent)
+
 
                 } else {
+                    Snackbar.make(
+                        binding.locationPage,
+                        R.string.failedToGetGeoLocation,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                     Log.d("MainActivityGetLocation", "onRequestPermissionsResult Отказали")
                 }
                 return
@@ -153,33 +176,43 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-
-                if (location != null) {
-                    Log.d(
-                        "MainActivityGetLocation",
-                        "getCurrentLocation \"${location.latitude},${location.longitude}\""
-                    )
-                    val intent = Intent(this, CurrentWeatherActivity::class.java)
-                    startActivity(intent)
-                    sharedPreferencesManager.saveLocation(
-                        "location",
-                        "${location.latitude},${location.longitude}"
-                    )
-                }
-
+        if (isNetworkAvailable(this)){
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+
+                    if (location != null) {
+                        Log.d(
+                            "MainActivityGetLocation",
+                            "getCurrentLocation \"${location.latitude},${location.longitude}\""
+                        )
+                        val intent = Intent(this, CurrentWeatherActivity::class.java)
+                        startActivity(intent)
+                        sharedPreferencesManager.saveLocation(
+                            "location",
+                            "${location.latitude},${location.longitude}"
+                        )
+                        onBoardingFinished()
+                    }
+
+                }
+        } else {
+            Snackbar.make(
+                binding.locationPage,
+                R.string.failedToGetWeather,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+
     }
 
     private fun checkLocationPermission(): Boolean {
@@ -199,6 +232,21 @@ class LocationActivity : AppCompatActivity() {
 
     private fun onBoardingFinished() {
         sharedPreferencesManager.saveFinishedViewPagerContainerState("FinishedViewPager", true)
+        sharedPreferencesManager.saveFinishedLocationState("backToCurrentWeatherActivity", true)
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
     }
 
     companion object {

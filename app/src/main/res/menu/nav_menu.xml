@@ -7,7 +7,7 @@
     <item
         android:id="@+id/findLocation"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Search Weather" />
+        android:title="@string/search_weather" />
 
 
 </menu>

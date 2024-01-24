@@ -53,6 +53,16 @@ class NextDayDetailsActivity : AppCompatActivity() {
         binding.recyclerViewNextDayHoursRV.adapter = adapter
 
 
+        if (nextDayDate != null) {
+            observeViewModel(nextDayDate, adapter)
+        }
+
+        displayNextDaysActivity()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun observeViewModel(nextDayDate: String, adapter: NextDayHoursAdapter){
         mainViewModel.currentWeatherData.observe(this) {
             val days = it.days
 
@@ -112,14 +122,14 @@ class NextDayDetailsActivity : AppCompatActivity() {
                 }
             }
         }
-
+    }
+    private fun displayNextDaysActivity(){
         binding.backToNextDaysButton.setOnClickListener {
             val intent = Intent(this, NextDaysActivity::class.java)
             startActivity(intent)
         }
-
-
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun formatMonthAndDay(userData: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

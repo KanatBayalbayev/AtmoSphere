@@ -32,28 +32,6 @@ class SharedPreferencesManager(context: Context) {
         return prefs.getString(key, defaultValue)
     }
 
-//    fun saveLatitude(key: String, value: String) {
-//        with(prefs.edit()) {
-//            putString(key, value)
-//            apply()
-//        }
-//    }
-//
-//    fun getLatitude(key: String, defaultValue: String): String? {
-//        return prefs.getString(key, defaultValue)
-//    }
-//
-//    fun saveLongitude(key: String, value: String) {
-//        with(prefs.edit()) {
-//            putString(key, value)
-//            apply()
-//        }
-//    }
-//
-//    fun getLongitude(key: String, defaultValue: String): String? {
-//        return prefs.getString(key, defaultValue)
-//    }
-
     fun saveFinishedViewPagerContainerState(key: String, value: Boolean) {
         with(prefs.edit()) {
             putBoolean(key, value)
@@ -62,6 +40,17 @@ class SharedPreferencesManager(context: Context) {
     }
 
     fun getFinishedViewPagerContainerState(key: String, defaultValue: Boolean): Boolean {
+        return prefs.getBoolean(key, defaultValue)
+    }
+
+    fun saveFinishedLocationState(key: String, value: Boolean) {
+        with(prefs.edit()) {
+            putBoolean(key, value)
+            apply()
+        }
+    }
+
+    fun getFinishedLocationState(key: String, defaultValue: Boolean): Boolean {
         return prefs.getBoolean(key, defaultValue)
     }
 
