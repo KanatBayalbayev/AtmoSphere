@@ -14,7 +14,7 @@ class HoursAdapter(
     private val context: Context
 ) : ListAdapter<HourEntity, HourViewHolder>(HourDiffCallBack) {
 
-    var onHourClickListener: OnHourClickListener? = null
+
     private var currentDate: String = ""
     val currentTime = Calendar.getInstance()
     val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
@@ -81,17 +81,12 @@ class HoursAdapter(
                 }
 
 
-                root.setOnClickListener {
-                    onHourClickListener?.onHourClick(this)
-                }
+
             }
         }
 
     }
 
-    interface OnHourClickListener {
-        fun onHourClick(hourEntity: HourEntity)
-    }
 
     fun getHours(time: String): String {
         val parts = time.split(" ")

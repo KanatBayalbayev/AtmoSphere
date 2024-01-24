@@ -171,6 +171,8 @@ class LocationActivity : AppCompatActivity() {
                         "MainActivityGetLocation",
                         "getCurrentLocation \"${location.latitude},${location.longitude}\""
                     )
+                    val intent = Intent(this, CurrentWeatherActivity::class.java)
+                    startActivity(intent)
                     sharedPreferencesManager.saveLocation(
                         "location",
                         "${location.latitude},${location.longitude}"
