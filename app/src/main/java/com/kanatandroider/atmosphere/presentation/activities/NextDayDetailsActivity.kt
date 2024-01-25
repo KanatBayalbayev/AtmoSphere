@@ -134,6 +134,6 @@ class NextDayDetailsActivity : AppCompatActivity() {
     fun formatMonthAndDay(userData: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val date = LocalDate.parse(userData, formatter)
-        return date.format(DateTimeFormatter.ofPattern("MMM, dd", Locale.US))
+        return date.format(DateTimeFormatter.ofPattern("MMM, dd"))
     }
 }

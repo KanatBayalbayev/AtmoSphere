@@ -35,7 +35,7 @@ class HoursAdapter(
                 val currentDayHourTemp = context.getString(R.string.currentDayHourTemp)
 
                 if (weatherHour.getHourFromDateTimeString() == currentHour){
-                    currentDayHourTimeTV.text = "Now"
+                    currentDayHourTimeTV.text = context.getString(R.string.nowHour)
                 } else {
                     currentDayHourTimeTV.text = getHours(time)
                 }

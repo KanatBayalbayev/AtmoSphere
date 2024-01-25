@@ -42,7 +42,7 @@
     <string name="nextDayMinTemp">ночь: %s°</string>
     <string name="chosenDayMinTemp">ночь: %s°</string>
     <string name="chosenDateMinTemp">ночь: %s°</string>
-    <string name="_7_day_forecast">7-дневный Прогноз Погоды</string>
+    <string name="_7_day_forecast">7-дневный прогноз</string>
     <string name="noConnection">Нет подключения к интернету</string>
     <string name="failedToConnect">Не удалось подключиться к интернету</string>
     <string name="tryAgainButton">Попробовать снова</string>
@@ -60,4 +60,5 @@
     <string name="menu">menu</string>
     <string name="days">Дни</string>
     <string name="day_night">День/Ночь</string>
+    <string name="nowHour">Сейчас</string>
 </resources>

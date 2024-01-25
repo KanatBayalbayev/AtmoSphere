@@ -42,7 +42,7 @@
     <string name="nextDayMinTemp">night: %s°</string>
     <string name="chosenDayMinTemp">night: %s°</string>
     <string name="chosenDateMinTemp">night: %s°</string>
-    <string name="_7_day_forecast">7-day Forecast</string>
+    <string name="_7_day_forecast">7-day forecast</string>
     <string name="noConnection">No Internet Connection</string>
     <string name="failedToConnect">Failed to connect to the internet</string>
     <string name="tryAgainButton">Try Again</string>
@@ -60,4 +60,5 @@
     <string name="menu">menu</string>
     <string name="days">Days</string>
     <string name="day_night">Day/Night</string>
+    <string name="nowHour">Now</string>
 </resources>
