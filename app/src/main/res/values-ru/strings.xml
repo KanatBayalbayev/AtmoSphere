@@ -43,10 +43,10 @@
     <string name="chosenDayMinTemp">ночь: %s°</string>
     <string name="chosenDateMinTemp">ночь: %s°</string>
     <string name="_7_day_forecast">7-дневный прогноз</string>
-    <string name="noConnection">Нет подключения к интернету</string>
+    <string name="noConnection">Нет подключения к интернету\nДанные прогноза погоды могут быть неактуальны</string>
     <string name="failedToConnect">Не удалось подключиться к интернету</string>
     <string name="tryAgainButton">Попробовать снова</string>
-    <string name="successConnection">Данные успешно обновлены</string>
+    <string name="successConnection">Данные прогноза погоды успешно обновлены</string>
     <string name="search_weather">Поиск Погоды</string>
     <string name="emptyEditText">Пожалуйста, укажите название города, чтобы получить прогноз погоды</string>
     <string name="failedToGetWeather">Не удалось получить прогноз погоды.\nПожалуйста, проверьте введенные данные и соединение с интернетом</string>

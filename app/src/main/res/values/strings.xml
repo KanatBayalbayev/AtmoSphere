@@ -43,10 +43,10 @@
     <string name="chosenDayMinTemp">night: %s°</string>
     <string name="chosenDateMinTemp">night: %s°</string>
     <string name="_7_day_forecast">7-day forecast</string>
-    <string name="noConnection">No Internet Connection</string>
+    <string name="noConnection">No Internet Connection\nThe weather forecast data may be outdated</string>
     <string name="failedToConnect">Failed to connect to the internet</string>
     <string name="tryAgainButton">Try Again</string>
-    <string name="successConnection">Data successfully updated</string>
+    <string name="successConnection">The weather forecast data successfully updated</string>
     <string name="search_weather">Search Weather</string>
     <string name="emptyEditText">Please enter the name of the city to get the weather forecast</string>
     <string name="failedToGetWeather">Failed to retrieve the weather forecast. Please check the data you entered and your internet connection</string>
