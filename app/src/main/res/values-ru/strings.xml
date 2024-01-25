@@ -61,4 +61,7 @@
     <string name="days">Дни</string>
     <string name="day_night">День/Ночь</string>
     <string name="nowHour">Сейчас</string>
+    <string name="policyicon">policyIcon</string>
+    <string name="i_accept_privacy_policy_terms_of_use"><![CDATA[I accept Privacy Policy & Terms of Use]]></string>
+    <string name="i_understand">I understand</string>
 </resources>
