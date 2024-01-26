@@ -37,7 +37,7 @@ data class ForcastDayEntity(
         val dayOfWeek = dateReady.dayOfWeek.value
         val locale = Locale.getDefault()
         val weekdays = DateFormatSymbols(locale).weekdays
-        return weekdays[dayOfWeek + 1]
+        return weekdays[dayOfWeek + 0]
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
