@@ -2,7 +2,7 @@ https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/f6170f87-fcfc-48c
 
 
 <img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/3a073ccc-0037-4431-940f-9829ad44a861" width="310" height="700"><img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/b1e5d452-bc6b-4c81-bf5c-abb21dcd92dd" width="310" height="700"><img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/b23059b4-55cd-46de-8089-ab5d02d0c541" width="310" height="700">
-<img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/bb891289-b84b-40ea-b3dc-4acf41fc8b3b" width="310" height="700"> <img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/16667b7c-64fd-4df4-9a10-5df081f0b165" width="310" height="700">
+<img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/bb891289-b84b-40ea-b3dc-4acf41fc8b3b" width="310" height="700"> 
 <img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/e81ff59e-3d60-4c30-a35c-ab6bd8365429" width="310" height="700"> <img src="https://github.com/KanatBayalbayev/AtmoSphere/assets/115481348/95ee54fd-acd9-45df-9799-6734e7c38e75" width="310" height="700">
 
 
