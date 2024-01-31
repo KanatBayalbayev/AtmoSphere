@@ -96,7 +96,7 @@
                     android:layout_marginStart="50dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="56sp"
+                    android:textSize="50sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/currentDayWeatherIconIV"
@@ -252,7 +252,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -261,7 +261,7 @@
                     android:layout_marginStart="20dp"
                     android:text="@string/today_title"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -274,7 +274,7 @@
                     android:layout_marginEnd="4dp"
                     android:text="@string/next_7_days_title"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/arrowRight"
