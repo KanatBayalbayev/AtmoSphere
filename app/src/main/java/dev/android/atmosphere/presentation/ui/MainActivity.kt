@@ -1,4 +1,4 @@
-package dev.android.atmosphere
+package dev.android.atmosphere.presentation.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dev.android.atmosphere.ui.theme.AtmoSphereTheme
+import dev.android.atmosphere.presentation.ui.theme.AtmoSphereTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

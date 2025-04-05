@@ -1,4 +1,4 @@
-package dev.android.atmosphere.ui.theme
+package dev.android.atmosphere.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
