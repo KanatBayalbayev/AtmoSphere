@@ -1,5 +1,6 @@
 package dev.android.atmosphere.domain.usecase
 
+import android.util.Log
 import dev.android.atmosphere.domain.model.DataState
 import dev.android.atmosphere.domain.model.Weather
 import dev.android.atmosphere.domain.repository.LocationRepository
@@ -18,12 +19,14 @@ class GetCurrentWeatherUseCase(
         val locationFlow = locationRepository.getCurrentLocation()
         var locationSuccess = false
 
+        Log.d("LocationRepository", "GetCurrentWeatherUseCase locationFlow: $locationFlow")
+
         locationFlow.collect { locationResource ->
             when (locationResource) {
                 is DataState.Success -> {
                     locationSuccess = true
                     val location = locationResource.data
-
+                    Log.d("LocationRepository", "GetCurrentWeatherUseCase Success location: $location")
                     weatherRepository.getCurrentWeather(location.latitude, location.longitude)
                         .collect { weatherResource ->
                             emit(weatherResource)

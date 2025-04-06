@@ -5,6 +5,7 @@ import dev.android.atmosphere.domain.usecase.GetForecastUseCase
 import dev.android.atmosphere.domain.usecase.GetLocationUseCase
 import dev.android.atmosphere.domain.usecase.RefreshForecastUseCase
 import dev.android.atmosphere.domain.usecase.RefreshWeatherUseCase
+import dev.android.atmosphere.domain.usecase.SearchCitiesUseCase
 import dev.android.atmosphere.domain.usecase.SearchCityUseCase
 import org.koin.dsl.module
 
@@ -18,4 +19,6 @@ val domainModule = module {
     factory { RefreshForecastUseCase(get(), get()) }
 
     factory { SearchCityUseCase(get()) }
+
+    factory { SearchCitiesUseCase(get()) }
 }

@@ -3,6 +3,7 @@ package dev.android.atmosphere.di
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dev.android.atmosphere.data.remote.api.GeoDbApiService
 import dev.android.atmosphere.data.remote.api.WeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,4 +40,16 @@ fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
 
 fun provideWeatherApi(retrofit: Retrofit): WeatherApi {
     return retrofit.create(WeatherApi::class.java)
+}
+
+fun provideGeoDbRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl("https://wft-geo-db.p.rapidapi.com/")
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+}
+
+fun provideGeoDbApiService(retrofit: Retrofit): GeoDbApiService {
+    return retrofit.create(GeoDbApiService::class.java)
 }

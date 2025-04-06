@@ -59,7 +59,6 @@ fun LocationPermissionScreen(
 
     LaunchedEffect(key1 = permissionGranted) {
         if (permissionGranted && isLocationServiceEnabled && error == null) {
-            // Если все проверки пройдены, переходим к главному экрану
             navController.navigate(Screen.Weather.route) {
                 popUpTo(Screen.LocationPermission.route) {
                     inclusive = true
@@ -76,7 +75,7 @@ fun LocationPermissionScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background), // Нужно создать или использовать существующую иконку
+            painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = "Иконка местоположения",
             modifier = Modifier
                 .size(100.dp)
@@ -102,7 +101,6 @@ fun LocationPermissionScreen(
                 modifier = Modifier.padding(16.dp)
             )
         } else if (!isLocationServiceEnabled) {
-            // Службы геолокации отключены
             Text(
                 text = "Службы геолокации отключены. Включите GPS в настройках устройства для точного определения местоположения.",
                 style = MaterialTheme.typography.bodyMedium,
@@ -131,10 +129,8 @@ fun LocationPermissionScreen(
             Button(
                 onClick = {
                     if (permissionGranted) {
-                        // Проверяем настройки местоположения снова
                         viewModel.checkLocationService()
                     } else {
-                        // Запрашиваем разрешение снова
                         permissionState.launchPermissionRequest()
                     }
                 }
@@ -145,7 +141,6 @@ fun LocationPermissionScreen(
             }
         } else if (!permissionState.status.isGranted) {
             if (permissionState.status.shouldShowRationale) {
-                // Показать объяснение, почему нужно разрешение
                 Text(
                     text = "Для корректной работы приложения необходим доступ к местоположению. Пожалуйста, предоставьте разрешение в настройках.",
                     style = MaterialTheme.typography.bodyMedium,
@@ -168,8 +163,7 @@ fun LocationPermissionScreen(
 
                 OutlinedButton(
                     onClick = {
-                        // Переход к экрану погоды без разрешения
-                        navController.navigate(Screen.Weather.route) {
+                        navController.navigate(Screen.CitySelection.route) {
                             popUpTo(Screen.LocationPermission.route) {
                                 inclusive = true
                             }

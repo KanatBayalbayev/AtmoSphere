@@ -5,8 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.android.atmosphere.presentation.screens.citySelection.CitySelectionScreen
 import dev.android.atmosphere.presentation.screens.permission.LocationPermissionScreen
 import dev.android.atmosphere.presentation.screens.splash.SplashScreen
+import dev.android.atmosphere.presentation.screens.weather.WeatherScreen
 
 @Composable
 fun NavGraph(
@@ -25,8 +27,12 @@ fun NavGraph(
             LocationPermissionScreen(navController = navController)
         }
 
+        composable(route = Screen.CitySelection.route) {
+            CitySelectionScreen(navController = navController)
+        }
+
         composable(route = Screen.Weather.route) {
-//            WeatherScreen()
+            WeatherScreen()
         }
     }
 }

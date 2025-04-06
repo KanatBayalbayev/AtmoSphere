@@ -1,5 +1,6 @@
 package dev.android.atmosphere.di
 
+import dev.android.atmosphere.presentation.screens.citySelection.CitySelectionViewModel
 import dev.android.atmosphere.presentation.screens.permission.LocationPermissionViewModel
 import dev.android.atmosphere.presentation.screens.splash.SplashViewModel
 import dev.android.atmosphere.presentation.screens.weather.WeatherViewModel
@@ -11,6 +12,8 @@ val presentationModule = module {
     viewModel { SplashViewModel() }
 
     viewModel { LocationPermissionViewModel(get()) }
+
+    viewModel { CitySelectionViewModel(get(), get()) }
 
     viewModel {
         WeatherViewModel(
