@@ -3,6 +3,7 @@ package dev.android.atmosphere.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import dev.android.atmosphere.data.util.DateConverter
 import java.time.LocalDate
 import java.time.LocalDateTime
 

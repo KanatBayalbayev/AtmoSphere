@@ -1,9 +1,12 @@
 package dev.android.atmosphere.data.repository
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.location.LocationRequest
 import android.os.Looper
+import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.doublePreferencesKey
@@ -11,6 +14,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
 import dev.android.atmosphere.domain.model.DataState
@@ -30,13 +34,22 @@ class LocationRepositoryImpl(
     private val context: Context
 ) : LocationRepository {
 
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager =
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+    @SuppressLint("MissingPermission")
     override fun getCurrentLocation(): Flow<DataState<UserLocation>> = callbackFlow {
         trySend(DataState.Loading)
 
         if (!isLocationServiceEnabled()) {
             trySend(DataState.Error("Службы геолокации отключены"))
+            close()
+            return@callbackFlow
+        }
+
+        // Проверяем наличие разрешения
+        if (!hasLocationPermission()) {
+            trySend(DataState.Error("Отсутствуют разрешения на доступ к местоположению"))
             close()
             return@callbackFlow
         }
@@ -113,7 +126,7 @@ class LocationRepositoryImpl(
         }
     }
 
-    override  fun getLastSavedLocation(): Flow<DataState<UserLocation>> = flow {
+    override fun getLastSavedLocation(): Flow<DataState<UserLocation>> = flow {
         emit(DataState.Loading)
 
         try {
@@ -129,6 +142,14 @@ class LocationRepositoryImpl(
         } catch (e: Exception) {
             emit(DataState.Error("Ошибка при получении сохраненного местоположения: ${e.message}"))
         }
+    }
+
+    // Добавьте эту функцию в класс
+    private fun hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private companion object {
