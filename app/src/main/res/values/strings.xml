@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">AtmoSphere</string>
     <string name="weather_forecast">Прогноз погоды</string>
+    <string name="location_icon_description">Иконка местоположения</string>
+    <string name="location_permission_title">Разрешение на местоположение</string>
+    <string name="location_permission_description">Для получения точного прогноза погоды в вашем районе нам необходимо разрешение на доступ к вашему местоположению.</string>
+    <string name="location_service_disabled">Службы геолокации отключены. Включите GPS в настройках устройства для точного определения местоположения.</string>
+    <string name="open_location_settings">Открыть настройки геолокации</string>
+    <string name="generic_error">Произошла ошибка</string>
+    <string name="check_location_settings">Проверить настройки геолокации</string>
+    <string name="request_permission">Запросить разрешение</string>
+    <string name="location_permission_rationale">Для корректной работы приложения необходим доступ к местоположению. Пожалуйста, предоставьте разрешение в настройках.</string>
+    <string name="allow_permission">Разрешить</string>
+    <string name="search_manually">Искать вручную</string>
+    <string name="open_app_settings">Открыть настройки приложения</string>
 </resources>

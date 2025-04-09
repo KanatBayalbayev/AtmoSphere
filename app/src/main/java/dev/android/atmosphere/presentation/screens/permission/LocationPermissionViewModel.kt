@@ -45,13 +45,12 @@ class LocationPermissionViewModel(
             getLocationUseCase().collect { result ->
                 when (result) {
                     is DataState.Success -> {
-                        // Местоположение доступно
                         _isLoading.value = false
                         _error.value = null
                     }
                     is DataState.Error -> {
                         _isLoading.value = false
-                        _error.value = result.message ?: "Не удалось получить местоположение"
+                        _error.value = result.message
                     }
                     is DataState.Loading -> {
                         _isLoading.value = true

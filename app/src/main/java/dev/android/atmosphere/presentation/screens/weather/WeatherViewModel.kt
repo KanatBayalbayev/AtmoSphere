@@ -1,5 +1,6 @@
 package dev.android.atmosphere.presentation.screens.weather
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.android.atmosphere.domain.model.DataState
@@ -43,37 +44,34 @@ class WeatherViewModel(
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
 
-    // Инициализация
     init {
         loadWeatherData()
     }
 
-    /**
-     * Загружает все данные о погоде на основе местоположения
-     */
-    fun loadWeatherData() {
-        viewModelScope.launch {
-            // Сначала загружаем местоположение
-            loadLocation()
 
-            // Загружаем погоду
+    private fun loadWeatherData() {
+        // Загрузка местоположения
+        viewModelScope.launch {
+            loadLocation()
+        }
+
+        // Загрузка текущей погоды в отдельной корутине
+        viewModelScope.launch {
             getCurrentWeatherUseCase().collect { result ->
                 when (result) {
                     is DataState.Success -> _weatherState.value = WeatherState.Success(result.data)
-
                     is DataState.Error -> _weatherState.value = WeatherState.Error(result.message)
-
                     is DataState.Loading -> _weatherState.value = WeatherState.Loading
                 }
             }
+        }
 
-            // Загружаем прогноз
+        // Загрузка прогноза в отдельной корутине
+        viewModelScope.launch {
             getForecastUseCase().collect { result ->
                 when (result) {
                     is DataState.Success -> _forecastState.value = ForecastState.Success(result.data)
-
                     is DataState.Error -> _forecastState.value = ForecastState.Error(result.message)
-
                     is DataState.Loading -> _forecastState.value = ForecastState.Loading
                 }
             }
@@ -194,21 +192,18 @@ class WeatherViewModel(
     }
 
 
-    // Состояния UI для текущей погоды
     sealed class WeatherState {
         object Loading : WeatherState()
         data class Success(val weather: Weather) : WeatherState()
         data class Error(val message: String) : WeatherState()
     }
 
-    // Состояния UI для прогноза
     sealed class ForecastState {
         object Loading : ForecastState()
         data class Success(val forecast: Forecast) : ForecastState()
         data class Error(val message: String) : ForecastState()
     }
 
-    // Состояния UI для местоположения
     sealed class LocationState {
         object Loading : LocationState()
         data class Success(val location: UserLocation) : LocationState()
