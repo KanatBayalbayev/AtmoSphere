@@ -2,8 +2,6 @@ package dev.android.atmosphere.presentation.screens.permission
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,17 +24,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import dev.android.atmosphere.R
-import dev.android.atmosphere.presentation.navigation.Screen
-import org.koin.androidx.compose.koinViewModel
-import android.provider.Settings
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import dev.android.atmosphere.R
+import dev.android.atmosphere.presentation.navigation.Screen
+import dev.android.atmosphere.presentation.utils.openAppSettings
+import dev.android.atmosphere.presentation.utils.openLocationSettings
+import org.koin.androidx.compose.koinViewModel
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -53,6 +55,37 @@ fun LocationPermissionScreen(
     val error by viewModel.error.collectAsState()
     val isLocationServiceEnabled by viewModel.isLocationServiceEnabled.collectAsState()
 
+    HandlePermissionEffects(
+        permissionState = permissionState,
+        permissionGranted = permissionGranted,
+        isLocationServiceEnabled = isLocationServiceEnabled,
+        error = error,
+        viewModel = viewModel,
+        navController = navController
+    )
+
+    DisplayLocationPermissionContent(
+        isLoading = isLoading,
+        isLocationServiceEnabled = isLocationServiceEnabled,
+        error = error,
+        permissionGranted = permissionGranted,
+        viewModel = viewModel,
+        permissionState = permissionState,
+        navController = navController,
+        context = context
+    )
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun HandlePermissionEffects(
+    permissionState: PermissionState,
+    permissionGranted: Boolean,
+    isLocationServiceEnabled: Boolean,
+    error: String?,
+    viewModel: LocationPermissionViewModel,
+    navController: NavController
+) {
     LaunchedEffect(key1 = permissionState.status.isGranted) {
         viewModel.onPermissionResult(permissionState.status.isGranted)
     }
@@ -66,7 +99,20 @@ fun LocationPermissionScreen(
             }
         }
     }
+}
 
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun DisplayLocationPermissionContent(
+    isLoading: Boolean,
+    isLocationServiceEnabled: Boolean,
+    error: String?,
+    permissionGranted: Boolean,
+    viewModel: LocationPermissionViewModel,
+    permissionState: PermissionState,
+    navController: NavController,
+    context: Context
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,124 +122,166 @@ fun LocationPermissionScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = "Иконка местоположения",
+            contentDescription = stringResource(id = R.string.location_icon_description),
             modifier = Modifier
                 .size(100.dp)
                 .padding(bottom = 24.dp)
         )
 
         Text(
-            text = "Разрешение на местоположение",
+            text = stringResource(id = R.string.location_permission_title),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         Text(
-            text = "Для получения точного прогноза погоды в вашем районе нам необходимо разрешение на доступ к вашему местоположению.",
+            text = stringResource(id = R.string.location_permission_description),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.padding(16.dp)
-            )
-        } else if (!isLocationServiceEnabled) {
-            Text(
-                text = "Службы геолокации отключены. Включите GPS в настройках устройства для точного определения местоположения.",
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(bottom = 16.dp)
+        when {
+            isLoading -> LoadingIndicator()
+            !isLocationServiceEnabled -> ShowLocationServiceDisabled(context)
+            error != null -> ShowErrorAndRetry(
+                error = error,
+                permissionGranted = permissionGranted,
+                viewModel = viewModel,
+                permissionState = permissionState,
+                onRetry = { viewModel.checkLocationService() }
             )
 
-            Button(
-                onClick = {
-                    openLocationSettings(context)
-                }
-            ) {
-                Text(text = "Открыть настройки геолокации")
-            }
-        } else if (error != null) {
-            // Ошибка получения местоположения
-            Text(
-                text = error ?: "Произошла ошибка",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 16.dp)
+            !permissionState.status.isGranted -> HandlePermissionNotGranted(
+                permissionState = permissionState,
+                navController = navController,
+                context = context
             )
-
-            Button(
-                onClick = {
-                    if (permissionGranted) {
-                        viewModel.checkLocationService()
-                    } else {
-                        permissionState.launchPermissionRequest()
-                    }
-                }
-            ) {
-                Text(
-                    text = if (permissionGranted) "Проверить настройки геолокации" else "Запросить разрешение"
-                )
-            }
-        } else if (!permissionState.status.isGranted) {
-            if (permissionState.status.shouldShowRationale) {
-                Text(
-                    text = "Для корректной работы приложения необходим доступ к местоположению. Пожалуйста, предоставьте разрешение в настройках.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-            ) {
-                Button(
-                    onClick = {
-                        permissionState.launchPermissionRequest()
-                    }
-                ) {
-                    Text(text = "Разрешить")
-                }
-
-                OutlinedButton(
-                    onClick = {
-                        navController.navigate(Screen.CitySelection.route) {
-                            popUpTo(Screen.LocationPermission.route) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                ) {
-                    Text(text = "Позже")
-                }
-            }
-
-            TextButton(
-                onClick = {
-                    openAppSettings(context)
-                },
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Text(text = "Открыть настройки приложения")
-            }
         }
     }
 }
 
-private fun openAppSettings(context: Context) {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.fromParts("package", context.packageName, null)
-    }
-    context.startActivity(intent)
+@Composable
+private fun LoadingIndicator() {
+    CircularProgressIndicator(
+        modifier = Modifier.padding(16.dp)
+    )
 }
 
-private fun openLocationSettings(context: Context) {
-    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-    context.startActivity(intent)
+@Composable
+private fun ShowLocationServiceDisabled(context: Context) {
+    Text(
+        text = stringResource(id = R.string.location_service_disabled),
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.error,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
+
+    Button(onClick = { openLocationSettings(context) }) {
+        Text(text = stringResource(id = R.string.open_location_settings))
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun ShowErrorAndRetry(
+    error: String?,
+    permissionGranted: Boolean,
+    viewModel: LocationPermissionViewModel,
+    permissionState: PermissionState,
+    onRetry: () -> Unit
+) {
+    Text(
+        text = error ?: stringResource(id = R.string.generic_error),
+        color = MaterialTheme.colorScheme.error,
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
+
+    Button(
+        onClick = {
+            if (permissionGranted) {
+                viewModel.checkLocationService()
+            } else {
+                permissionState.launchPermissionRequest()
+            }
+        }
+    ) {
+        Text(
+            text = if (permissionGranted) stringResource(id = R.string.check_location_settings) else stringResource(id = R.string.request_permission)
+        )
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun HandlePermissionNotGranted(
+    permissionState: PermissionState,
+    navController: NavController,
+    context: Context
+) {
+    if (permissionState.status.shouldShowRationale) {
+        LocationPermissionRationaleText()
+    }
+
+    DisplayPermissionButtons(
+        permissionState = permissionState,
+        navController = navController,
+        context = context
+    )
+}
+
+@Composable
+private fun LocationPermissionRationaleText() {
+    Text(
+        text = stringResource(id = R.string.location_permission_rationale),
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun DisplayPermissionButtons(
+    permissionState: PermissionState,
+    navController: NavController,
+    context: Context
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+    ) {
+        Button(
+            onClick = {
+                permissionState.launchPermissionRequest()
+            }
+        ) {
+            Text(text = stringResource(id = R.string.allow_permission))
+        }
+
+        OutlinedButton(
+            onClick = {
+                navController.navigate(Screen.CitySelection.route) {
+                    popUpTo(Screen.LocationPermission.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        ) {
+            Text(text = stringResource(id = R.string.search_manually))
+        }
+    }
+
+    TextButton(
+        onClick = {
+            openAppSettings(context)
+        },
+        modifier = Modifier.padding(top = 8.dp)
+    ) {
+        Text(text = stringResource(id = R.string.open_app_settings))
+    }
 }

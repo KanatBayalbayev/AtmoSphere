@@ -1,5 +1,6 @@
 package dev.android.atmosphere.data.repository
 
+import android.util.Log
 import dev.android.atmosphere.data.local.dao.WeatherDao
 import dev.android.atmosphere.data.mapper.WeatherMapper
 import dev.android.atmosphere.data.remote.api.WeatherApi
@@ -44,6 +45,7 @@ class WeatherRepositoryImpl(
 
         when (response) {
             is ApiResult.Success -> {
+                Log.d("WeatherRepositoryImpl", "Received weather data: ${response.data}")
                 val weather = mapper.mapToDomainWeather(response.data)
                 cacheWeather(weather)
                 emit(DataState.Success(weather))
@@ -74,12 +76,16 @@ class WeatherRepositoryImpl(
 
         when (response) {
             is ApiResult.Success -> {
+                Log.d("WeatherRepositoryImpl", "Received forecast data: ${response.data}")
                 val forecast = mapper.mapToDomainForecast(response.data)
                 saveForecastToDb(forecast)
                 emit(DataState.Success(forecast))
             }
 
-            is ApiResult.Error -> emitCachedForecast(this)
+            is ApiResult.Error -> {
+                Log.e("WeatherRepositoryImpl", "Error fetching forecast: ${response.exception}")
+                emitCachedForecast(this)
+            }
 
             is ApiResult.Loading -> Unit
         }
